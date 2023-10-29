@@ -1,0 +1,24 @@
+.profile__form {
+    width: 410px;
+    display: flex;
+    flex-direction: column;
+    padding: 0 14px 13px 0;
+}
+
+@media screen and (max-width: 768px) {
+    .profile__form {
+        padding-right: 0;
+    }
+}
+
+@media screen and (max-width: 550px) {
+    .profile__form {
+        width: 300px;
+    }
+}
+
+@media screen and (max-width: 320px) {
+    .profile__form {
+        width: 261px;
+    }
+}

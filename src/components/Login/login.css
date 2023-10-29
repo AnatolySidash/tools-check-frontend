@@ -1,0 +1,33 @@
+.login {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    margin: 0 auto;
+    padding: 0;
+    width: 396px;
+    height: calc(100vh - 70px);
+}
+
+@media screen and (max-width: 768px) {
+    .login {
+        padding-top: 232px;
+        height: calc(100vh - 232px);
+    }
+}
+
+@media screen and (max-width: 450px) {
+    .login {
+        width: 320px;
+    }
+}
+
+@media screen and (max-width: 350px) {
+    .login {
+        width: 260px;
+        align-items: center;
+        justify-content: flex-start;
+        padding-top: 56px;
+        height: calc(100vh - 56px);
+    }
+}

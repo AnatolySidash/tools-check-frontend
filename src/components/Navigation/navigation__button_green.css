@@ -1,0 +1,12 @@
+.navigation__button_green {
+   padding: 8px 20px;
+   background-color: #6666FF;
+   border-radius: 3px;
+   color: #fff;
+}
+
+@media screen and (max-width: 390px) {
+   .navigation__button_green {
+      padding: 5px 12px;
+   }
+}

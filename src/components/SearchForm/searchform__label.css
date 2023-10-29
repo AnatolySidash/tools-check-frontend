@@ -1,0 +1,50 @@
+.searchform__label {
+   padding: 0 0 0 46px;
+   margin: 0 20px;
+   font-size: 12px;
+   line-height: 1.5;
+   font-weight: 400;
+   position: relative;
+   cursor: pointer;
+   transition: opacity 0.3s ease-in-out;
+}
+
+.searchform__label:hover {
+   opacity: 0.8;
+}
+
+.searchform__label::before {
+   content: '';
+   position: absolute;
+   display: inline-block;
+   width: 36px;
+   height: 20px;
+   left: -1px;
+   bottom: -2px;
+   background: url(../../images/04_searchform/checkbox_off.svg) center no-repeat;
+   cursor: pointer;
+   transition: opacity 0.3s ease-in-out;
+}
+
+.searchform__label::after {
+   content: '';
+   position: absolute;
+   display: inline-block;
+   width: 36px;
+   height: 20px;
+   left: -1px;
+   bottom: -2px;
+   background: url(../../images/04_searchform/checkbox_on.svg) center no-repeat;
+   cursor: pointer;
+   z-index: 1;
+   opacity: 0;
+   transition: opacity 0.3s ease-in-out;
+}
+
+.searchform__checkbox:checked+.searchform__label::before {
+   opacity: 0;
+}
+
+.searchform__checkbox:checked+.searchform__label::after {
+   opacity: 1;
+}

@@ -1,0 +1,19 @@
+.toolscreen__button {
+    padding: 10px 20px;
+    margin: 0;
+    background-color: #6666FF;
+    border: none;
+    border-radius: 3px;
+    font-weight: 500;
+    font-size: 14px;
+    color: #fff;
+    cursor: pointer;
+    transition: opacity 0.3s ease-in-out;
+    position: absolute;
+    top: 70px;
+    left: 610px;
+}
+
+.toolscreen__button:hover {
+    opacity: 0.8;
+}

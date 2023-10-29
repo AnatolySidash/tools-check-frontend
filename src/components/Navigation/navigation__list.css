@@ -1,0 +1,14 @@
+.navigation__list {
+   display: flex;
+   padding: 0 0 0 62px;
+   gap: 16px;
+   text-decoration: none;
+   list-style: none;
+   margin: 0;
+}
+
+@media screen and (max-width: 768px) {
+   .navigation__list {
+      display: none;
+   }
+}

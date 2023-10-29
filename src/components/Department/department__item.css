@@ -1,0 +1,12 @@
+.department__item {
+    padding: 10px;
+    margin: 0;
+    background-color: #424242;
+    color: #b8b8b8;
+    border-radius: 3px;
+    transition: color 0.3s ease-in-out;
+}
+
+.department__item:hover {
+    color: #fff;
+}

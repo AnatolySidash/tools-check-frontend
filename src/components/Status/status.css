@@ -1,0 +1,7 @@
+.status {
+    max-width: 1600px;
+    margin: 40px 70px 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}

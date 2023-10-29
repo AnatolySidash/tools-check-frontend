@@ -1,0 +1,12 @@
+.toolscreen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: calc(100% - 140px);
+    height: 100vh;
+    padding: 70px 70px 20px;
+    background-color: #202020;
+    visibility: hidden;
+    opacity: 0;
+    transition: visibility 0.4s, opacity 0.4s ease-out;
+}

@@ -1,0 +1,19 @@
+.toolscreen__close {
+    background-color: transparent;
+    padding: 0;
+    border: none;
+    background: url(../../images/03_toolscreen/close.svg) center no-repeat;
+    background-size: cover;
+    position: absolute;
+    top: 70px;
+    right: 80px;
+    width: 32px;
+    height: 32px;
+    z-index: 1;
+    cursor: pointer;
+    transition: transform .4s ease-in-out;
+}
+
+.toolscreen__close:hover {
+    transform: rotateZ(120deg);
+  }

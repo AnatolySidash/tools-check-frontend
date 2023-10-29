@@ -1,0 +1,8 @@
+.register__link-accent {
+    color: #6666FF;
+    transition: opacity 0.3s ease-in-out;
+}
+
+.register__link-accent:hover {
+    opacity: 0.7;
+}

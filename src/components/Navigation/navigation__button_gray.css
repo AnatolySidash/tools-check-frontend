@@ -1,0 +1,13 @@
+.navigation__button_gray {
+   padding: 8px 21px;
+   background-color: #313131;
+   font-size: 14px;
+   border-radius: 20px;
+   color: #fff;
+}
+
+@media screen and (max-width: 768px) {
+   .navigation__button_gray {
+      display: none;
+   }
+}

@@ -1,0 +1,9 @@
+.navigation__item:first-child {
+   margin-right: 31px;
+}
+
+@media screen and (max-width: 390px) {
+   .navigation__item:first-child {
+      margin-right: 15px;
+   }
+}

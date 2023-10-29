@@ -1,0 +1,12 @@
+.toolscreen__input {
+    background-color: #424242;
+    border: none;
+    outline: none;
+    border-radius: 2px;
+    padding: 8px 5px;
+    margin: 0 0 15px;
+    min-height: 19px;
+    width: 95%;
+    font-size: 14px;
+    color: #fff;
+}

@@ -1,0 +1,11 @@
+.root {
+   background: #202020;
+   min-height: 100vh;
+   color: white;
+   z-index: 2;
+   position: relative;
+}
+
+html {
+   scroll-behavior: smooth;
+}

@@ -1,0 +1,15 @@
+.department__title {
+    padding: 0;
+    margin: 0 0 15px 0;
+    position: relative;
+}
+
+.department__title::after {
+    content: '';
+    bottom: -7.5px;
+    left: 0;
+    position: absolute;
+    width: 100%;
+    height: 1px;
+    background-color: #fff;
+}

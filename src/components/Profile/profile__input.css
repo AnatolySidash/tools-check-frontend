@@ -1,0 +1,17 @@
+.profile__input {
+    background-color: transparent;
+    border: 0;
+    border-radius: 3px;
+    color: #fff;
+    text-align: right;
+}
+
+.profile__input:focus {
+    outline: none;
+    background-color: #2f2f2f;
+}
+
+.profile__input::placeholder {
+    color: #fff;
+    text-align: right;
+}

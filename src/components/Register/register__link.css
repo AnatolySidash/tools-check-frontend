@@ -1,0 +1,15 @@
+.register__link {
+    padding: 3px 0 0;
+    margin: 0 auto;
+    text-decoration: none;
+    font-family: 'Inter', Arial, sans-serif;
+    font-style: normal;
+    font-size: 14px;
+    font-weight: 400;
+    color: #8b8b8b;
+}
+
+.register__link:focus {
+    outline: none;
+    background-color: #2f2f2f;
+}

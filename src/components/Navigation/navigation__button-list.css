@@ -1,0 +1,8 @@
+.navigation__button-list {
+   display: flex;
+   padding: 0;
+   align-items: center;
+   text-decoration: none;
+   list-style: none;
+   margin: 0;
+}

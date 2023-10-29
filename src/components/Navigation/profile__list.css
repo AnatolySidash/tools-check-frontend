@@ -1,0 +1,15 @@
+.profile__list {
+   display: flex;
+   align-items: center;
+   gap: 30px;
+   padding: 0 2px 0 0;
+}
+
+@media screen and (max-width: 768px) {
+   .profile__list {
+      position: absolute;
+      right: 0;
+      bottom: 0;
+      z-index: 2;
+   }
+}

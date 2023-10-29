@@ -1,0 +1,7 @@
+.toolscard__item_red {
+    background-color: #ec4343;
+    padding: 3px 8px;
+    border-radius: 3px;
+    color: #000;
+    font-weight: bold;
+}
