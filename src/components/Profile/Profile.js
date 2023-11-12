@@ -67,7 +67,6 @@ function Profile({ isLoggedIn, onLogout, setCurrentUser }) {
       // eslint-disable-next-line react-hooks/exhaustive-deps
    }, []);
 
-
    return (
       <>
          <Header

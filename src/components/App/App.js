@@ -12,6 +12,8 @@ import { CurrentUserContext } from '../../contexts/CurrentUserContext.js';
 import mainApi from '../../utils/MainApi.js';
 import { ProtectedRoute } from '../ProtectedRoute/ProtectedRoute.js';
 import * as auth from '../../utils/Auth.js';
+import DepartmentScreen from '../DepartmentScreen/DepartmentScreen.js';
+import { DEPARTMENTS } from '../../utils/Constants.js';
 
 function App() {
 
@@ -19,11 +21,14 @@ function App() {
     const [currentUser, setCurrentUser] = React.useState({});
     const [tools, setTools] = React.useState([]);
     const [selectedTool, setSelectedTool] = React.useState(null);
+    const [selectedDepartment, setSelectedDepartment] = React.useState(null);
     const [isToolScreenOpen, setToolScreenOpen] = React.useState(false);
+    const [isDepartmentScreenOpen, setDepartmentScreenOpen] = React.useState(false);
     const [isNewToolScreenOpen, setNewToolScreenOpen] = React.useState(false);
     const [isToolInfoUpdated, setToolInfoUpdated] = React.useState(false);
     const [isNewToolAdded, setNewToolAdded] = React.useState(false)
     const [isToolInfoDeleted, setToolInfoDeleted] = React.useState(false)
+    const departments = DEPARTMENTS;
 
     const navigate = useNavigate();
 
@@ -36,12 +41,18 @@ function App() {
         setToolScreenOpen(true);
     }
 
+    function handleDepartmentClick(department) {
+        setSelectedDepartment(department);
+        setDepartmentScreenOpen(true);
+    }
+
     function handleNewToolClick() {
         setNewToolScreenOpen(true);
     }
 
     function closeAllPopups() {
         setToolScreenOpen(false);
+        setDepartmentScreenOpen(false);
         setNewToolScreenOpen(false)
         setToolInfoUpdated(false);
         setNewToolAdded(false);
@@ -85,7 +96,7 @@ function App() {
           .catch((err) => {
             console.error(`Ошибка получения средств измерения: ${err}`);
           });
-    }, [isToolScreenOpen, isNewToolScreenOpen]); 
+    }, [isToolScreenOpen, isNewToolScreenOpen, isToolInfoUpdated, isNewToolAdded, isToolInfoDeleted, selectedTool]); 
 
     function logout() {
         auth.clearCookie()
@@ -126,6 +137,8 @@ function App() {
                         <Route path="/status" element={
                             <Status
                                 isLoggedIn={isLoggedIn}
+                                departments={departments}
+                                onDepartmentClick={handleDepartmentClick}
                             />
                         } />
 
@@ -162,6 +175,13 @@ function App() {
                         setToolInfoUpdated={setToolInfoUpdated}
                         isToolInfoDeleted={isToolInfoDeleted}
                         setToolInfoDeleted={setToolInfoDeleted}
+                    />
+
+                    <DepartmentScreen
+                        selectedDepartment={selectedDepartment}
+                        isOpen={isDepartmentScreenOpen}
+                        onClose={closeAllPopups}
+                        tools={tools}
                     />
 
                     <NewToolScreen

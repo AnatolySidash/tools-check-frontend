@@ -1,0 +1,8 @@
+.departmentscreen__block {
+    padding: 10px 15px;
+    margin: 0;
+    min-width: 47%;
+    min-height: 395px;
+    background-color: #424242;
+    border-radius: 3px;
+}

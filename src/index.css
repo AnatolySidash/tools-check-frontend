@@ -50,6 +50,7 @@
 
 @import url(./components/ToolsCard/toolscard.css);
 @import url(./components/ToolsCard/toolscard__title.css);
+@import url(./components/ToolsCard/toolscard__title-accent.css);
 @import url(./components/ToolsCard/toolscard__list.css);
 @import url(./components/ToolsCard/toolscard__subtitle.css);
 @import url(./components/ToolsCard/toolscard__subtitle_black.css);
@@ -60,6 +61,7 @@
 @import url(./components/ToolsCard/toolscard__button.css);
 @import url(./components/ToolsCard/toolscard__info.css);
 @import url(./components/ToolsCard/toolscard__link.css);
+@import url(./components/ToolsCard/toolscard__timelimit.css);
 
 /* ------ToolScreen------ */
 
@@ -72,16 +74,11 @@
 @import url(./components/ToolScreen/toolscreen__button.css);
 @import url(./components/ToolScreen/toolscreen__button_delete.css);
 @import url(./components/ToolScreen/toolscreen__button_copy.css);
-@import url(./components/ToolScreen/toolscreen__block_checkbox.css);
-@import url(./components/ToolScreen/toolscreen__input_checkbox-avail.css);
-@import url(./components/ToolScreen/toolscreen__input_checkbox-work.css);
-@import url(./components/ToolScreen/toolscreen__input_checkbox-doc.css);
-@import url(./components/ToolScreen/toolscreen__item_checkbox.css);
-@import url(./components/ToolScreen/toolscreen__item_comment.css);
 @import url(./components/ToolScreen/toolscreen__input_textarea.css);
 @import url(./components/ToolScreen/toolscreen_opened.css);
 @import url(./components/ToolScreen/toolscreen__close.css);
 @import url(./components/ToolScreen/toolscreen__infotooltip.css);
+@import url(./components/ToolScreen/toolscreen__comment.css);
 
 /* ------NewToolScreen------ */
 
@@ -143,3 +140,19 @@
 @import url(./components/Department/department__data.css);
 @import url(./components/Department/department__subtitle.css);
 @import url(./components/Department/department__result.css);
+
+/* ------DepartmentScreen------ */
+
+@import url(./components/DepartmentScreen/departmentscreen.css);
+@import url(./components/DepartmentScreen/departmentscreen_opened.css);
+@import url(./components/DepartmentScreen/departmentscreen__title.css);
+@import url(./components/DepartmentScreen/departmentscreen__info.css);
+@import url(./components/DepartmentScreen/departmentscreen__block.css);
+@import url(./components/DepartmentScreen/departmentscreen__block_problem.css);
+@import url(./components/DepartmentScreen/departmentscreen__subtitle.css);
+@import url(./components/DepartmentScreen/departmentscreen__item.css);
+@import url(./components/DepartmentScreen/departmentscreen__data.css);
+@import url(./components/DepartmentScreen/departmentscreen__name.css);
+@import url(./components/DepartmentScreen/departmentscreen__result.css);
+@import url(./components/DepartmentScreen/departmentscreen__list.css);
+@import url(./components/DepartmentScreen/departmentscreen__accent.css);

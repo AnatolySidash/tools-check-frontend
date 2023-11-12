@@ -17,7 +17,6 @@ function ToolsCardList({ tools, onToolClick, onClose, onNewToolAdd }) {
                                 onClose={onClose}
                                 onToolClick={onToolClick}
                             />
-
                         ))}  
                     </li>
                 </ul>

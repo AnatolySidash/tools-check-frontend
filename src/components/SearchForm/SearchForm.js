@@ -69,16 +69,15 @@ function SearchForm({ setTools }) {
       event.preventDefault();
 
       try {
-         if (!localStorage.getItem('allTools')) {
             const tools = await mainApi.getTools();
             localStorage.setItem('allTools', JSON.stringify(tools));
-         }
          if (inputValue) {
             const allTools = JSON.parse(localStorage.getItem('allTools'));
             const filteredTools = allTools.filter((tool) => {
                return (
                   tool.toolId.toLowerCase().includes(inputValue.toLowerCase()) || 
                   tool.toolNameRU.toLowerCase().includes(inputValue.toLowerCase()) ||
+                  tool.toolCalibrationStatus.toLowerCase().includes(inputValue.toLowerCase()) ||
                   tool.toolCondition.toLowerCase().includes(inputValue.toLowerCase()) ||
                   tool.toolOwnerDept.toLowerCase().includes(inputValue.toLowerCase()) ||
                   tool.toolOwnerName.toLowerCase().includes(inputValue.toLowerCase())
@@ -109,7 +108,7 @@ function SearchForm({ setTools }) {
          const filteredTools = tools.filter((tool) => {
             if (isOkCheckboxChecked) {
                return (
-                  (tool.toolCondition === 'Годен') &&
+                  (tool.toolCalibrationStatus === 'Годен') &&
                   (tool.toolId.toLowerCase().includes(inputValue.toLowerCase()) || 
                      tool.toolNameRU.toLowerCase().includes(inputValue.toLowerCase()) ||
                      tool.toolOwnerDept.toLowerCase().includes(inputValue.toLowerCase()) ||
@@ -119,7 +118,7 @@ function SearchForm({ setTools }) {
                return (
                   tool.toolId.toLowerCase().includes(inputValue.toLowerCase()) || 
                   tool.toolNameRU.toLowerCase().includes(inputValue.toLowerCase()) ||
-                  tool.toolCondition.toLowerCase().includes(inputValue.toLowerCase()) ||
+                  tool.toolCalibrationStatus.toLowerCase().includes(inputValue.toLowerCase()) ||
                   tool.toolOwnerDept.toLowerCase().includes(inputValue.toLowerCase()) ||
                   tool.toolOwnerName.toLowerCase().includes(inputValue.toLowerCase())
                );
@@ -144,7 +143,7 @@ function SearchForm({ setTools }) {
          const filteredTools = tools.filter((tool) => {
             if (isNotOkCheckboxChecked) {
                return (
-                  (tool.toolCondition === 'Не годен') &&
+                  (tool.toolCalibrationStatus === 'Не годен') &&
                   (tool.toolId.toLowerCase().includes(inputValue.toLowerCase()) || 
                      tool.toolNameRU.toLowerCase().includes(inputValue.toLowerCase()) ||
                      tool.toolOwnerDept.toLowerCase().includes(inputValue.toLowerCase()) ||
@@ -154,7 +153,7 @@ function SearchForm({ setTools }) {
                return (
                   tool.toolId.toLowerCase().includes(inputValue.toLowerCase()) || 
                   tool.toolNameRU.toLowerCase().includes(inputValue.toLowerCase()) ||
-                  tool.toolCondition.toLowerCase().includes(inputValue.toLowerCase()) ||
+                  tool.toolCalibrationStatus.toLowerCase().includes(inputValue.toLowerCase()) ||
                   tool.toolOwnerDept.toLowerCase().includes(inputValue.toLowerCase()) ||
                   tool.toolOwnerName.toLowerCase().includes(inputValue.toLowerCase())
                );
