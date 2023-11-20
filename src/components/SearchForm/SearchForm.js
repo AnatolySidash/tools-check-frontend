@@ -1,10 +1,10 @@
 import React from 'react';
 import FileSaver from '../../utils/FileSaver.js';
 import * as XLSX from 'xlsx';
-import mainApi from '../../utils/MainApi';
 import { EXCEL_TYPE, EXCEL_EXTENSION } from '../../utils/Constants.js'
+// import Localbase from 'localbase';
 
-function SearchForm({ setTools }) {
+function SearchForm({ tools, setTools }) {
 
    const [inputValue, setInputValue] = React.useState('');
    const [isInputEmpty, setInputEmpty] = React.useState(false);
@@ -25,6 +25,11 @@ function SearchForm({ setTools }) {
    function handleNotOkCheckboxChange(event) {
       setNotOkCheckboxChecked(event.target.checked);
    }
+
+   React.useEffect(() => {
+      localStorage.setItem('allTools', JSON.stringify(tools));
+   // eslint-disable-next-line react-hooks/exhaustive-deps
+   }, []);
 
    React.useEffect(() => {
       if (localStorage.getItem('inputValue')) {
@@ -50,14 +55,14 @@ function SearchForm({ setTools }) {
       }
    }, []);
 
-   React.useEffect(() => {
-      if (localStorage.getItem('filteredTools')) {
-         setTools(JSON.parse(localStorage.getItem('filteredTools')));
-      } else {
-         setTools([]);
-      }
-   // eslint-disable-next-line react-hooks/exhaustive-deps
-   }, []);
+   // React.useEffect(() => {
+   //    if (localStorage.getItem('filteredTools')) {
+   //       setTools(JSON.parse(localStorage.getItem('filteredTools')));
+   //    } else {
+   //       setTools([]);
+   //    }
+   // // eslint-disable-next-line react-hooks/exhaustive-deps
+   // }, []);
 
    React.useEffect(() => {
       setTimeout(() => {
@@ -69,7 +74,6 @@ function SearchForm({ setTools }) {
       event.preventDefault();
 
       try {
-            const tools = await mainApi.getTools();
             localStorage.setItem('allTools', JSON.stringify(tools));
          if (inputValue) {
             const allTools = JSON.parse(localStorage.getItem('allTools'));
@@ -98,7 +102,7 @@ function SearchForm({ setTools }) {
             setInputEmpty(true);
          }
       } catch (err) {
-         console.error(`Ошибка загрузки списка средст измерения: ${err}`);
+         console.error(`Ошибка загрузки списка средств измерения: ${err}`);
       }
    }
 

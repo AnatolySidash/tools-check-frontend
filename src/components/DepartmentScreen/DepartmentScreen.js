@@ -82,14 +82,26 @@ function DepartmentScreen({ tools, onClose, isOpen, selectedDepartment }) {
         );
     })
 
+    const okReleasedTools = okTools.filter((tool) => {
+        return (tool.toolCondition.toLowerCase().includes('выдан'.toLowerCase()) &&
+                tool.toolOwnerDept.toLowerCase().includes(currentDepartment?.shortNameEN.toLowerCase())
+        );
+    })
+
     const notOkNotUsingTools = notOkTools.filter((tool) => {
         return (!tool.toolCondition.toLowerCase().includes('используется'.toLowerCase()) &&
                 tool.toolOwnerDept.toLowerCase().includes(currentDepartment?.shortNameEN.toLowerCase())
         );
     })
+
+    const notOkReleasedTools = notOkTools.filter((tool) => {
+        return (tool.toolCondition.toLowerCase().includes('выдан'.toLowerCase()) &&
+                tool.toolOwnerDept.toLowerCase().includes(currentDepartment?.shortNameEN.toLowerCase())
+        );
+    })
     
     const checkingTools = tools.filter((tool) => {
-        return (tool.toolCondition.toLowerCase().includes('на поверке'.toLowerCase()) &&
+        return (tool.toolCondition.toLowerCase().includes('поверка/калибровка'.toLowerCase()) &&
                 tool.toolOwnerDept.toLowerCase().includes(currentDepartment?.shortNameEN.toLowerCase())
         );
     })
@@ -172,6 +184,10 @@ function DepartmentScreen({ tools, onClose, isOpen, selectedDepartment }) {
                                     <p className='departmentscreen__result'>{needRegisterTools.length}</p>
                                 </li>
                                 <li className='departmentscreen__item'>
+                                    <h3 className='departmentscreen__name'>Выданы:</h3>
+                                    <p className='departmentscreen__result'>{okReleasedTools.length}</p>
+                                </li>
+                                <li className='departmentscreen__item'>
                                     <h3 className='departmentscreen__name'>На хранении:</h3>
                                     <p className='departmentscreen__result'>{okSpareTools.length}</p>
                                 </li>
@@ -202,6 +218,10 @@ function DepartmentScreen({ tools, onClose, isOpen, selectedDepartment }) {
                                 <p className='departmentscreen__result'>{notOkNotUsingTools.length}</p>
                             </li>
                             <ul className='departmentscreen__sublist'>
+                                <li className='departmentscreen__item'>
+                                    <h3 className='departmentscreen__name'>Выданы:</h3>
+                                    <p className='departmentscreen__result'>{notOkReleasedTools.length}</p>
+                                </li>
                                 <li className='departmentscreen__item'>
                                     <h3 className='departmentscreen__name'>На хранении:</h3>
                                     <p className='departmentscreen__result'>{notOkSpareTools.length}</p>

@@ -91,12 +91,23 @@ function App() {
 
     React.useEffect(() => {
         mainApi.getTools().then((tools) => {
-          setTools(tools);
+            const allTools = tools.map((tool) => {
+                const todayDate = new Date();
+                const nextCheckDate = new Date(tool.toolNextCheckDate);
+                const dayDifference = Math.round((nextCheckDate - todayDate) / (60 * 60 * 24 * 1000));
+                if (dayDifference > 0) {
+                    tool.toolCalibrationStatus = 'Годен';
+                } else {
+                    tool.toolCalibrationStatus = 'Не годен';
+                }
+                return tool;
+            });
+            setTools(allTools);
         })
           .catch((err) => {
             console.error(`Ошибка получения средств измерения: ${err}`);
           });
-    }, [isToolScreenOpen, isNewToolScreenOpen, isToolInfoUpdated, isNewToolAdded, isToolInfoDeleted, selectedTool]); 
+    }, [isToolScreenOpen, isNewToolScreenOpen, isToolInfoUpdated, isNewToolAdded, isToolInfoDeleted, selectedTool, setTools]); 
 
     function logout() {
         auth.clearCookie()
@@ -136,6 +147,7 @@ function App() {
 
                         <Route path="/status" element={
                             <Status
+                                tools={tools}
                                 isLoggedIn={isLoggedIn}
                                 departments={departments}
                                 onDepartmentClick={handleDepartmentClick}

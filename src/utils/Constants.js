@@ -2,6 +2,13 @@ export const EXCEL_TYPE = 'application/vnd.openxmlformats-officedocument.spreads
 
 export const EXCEL_EXTENSION = '.xlsx';
 
+export const LARGE_SCREEN_SIZE = 1550;
+export const MEDIUM_SCREEN_SIZE = 1200;
+export const MAX_TOOLS_QTY = 50;
+export const MID_TOOLS_QTY = 50
+export const MAX_EXTRA_TOOLS_QTY = 25;
+export const MID_EXTRA_TOOLS_QTY = 25;
+
 export const DEPARTMENTS = [
     {
         _id: 1,

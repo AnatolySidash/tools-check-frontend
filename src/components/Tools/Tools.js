@@ -13,6 +13,7 @@ function Tools({ isLoggedIn, tools, setTools, onToolClick, onNewToolAdd }) {
             <main className="tools">
                 <SearchForm 
                   setTools={setTools}
+                  tools={tools}
                 />
                 <ToolsCardList 
                   tools={tools}

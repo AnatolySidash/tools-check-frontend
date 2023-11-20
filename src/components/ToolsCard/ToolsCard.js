@@ -4,7 +4,7 @@ function ToolsCard({ tool, onToolClick }) {
     
     const OKTool = tool?.toolCalibrationStatus.toLowerCase() !== 'не годен';
     const newTool = tool?.toolCondition.toLowerCase() === 'требуется регистрация';
-
+    
     const toolConditionClassName = (`toolscard__item ${OKTool ? 'toolscard__item_green' : 'toolscard__item_red'}`);
 
     function checkDayDifference () {

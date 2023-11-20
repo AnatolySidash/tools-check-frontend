@@ -1,63 +1,62 @@
 import React from 'react';
-import mainApi from '../../utils/MainApi';
 
-function Department({ department, onDepartmentClick }) {
+function Department({ tools, department, onDepartmentClick }) {
 
-    const [allTools, setAllTools] = React.useState([]);
+    // const [allTools, setAllTools] = React.useState([]);
 
-    async function handleToolListUpdate() {
-        try {
-            const tools = await mainApi.getTools();
-            localStorage.setItem('allTools', JSON.stringify(tools));
-            setAllTools(JSON.parse(localStorage.getItem('allTools')));
-        } catch (err) {
-            console.error(`Ошибка загрузки списка средст измерения: ${err}`);
-        }
-     }
+    // async function handleToolListUpdate() {
+    //     try {
+    //         const tools = await mainApi.getTools();
+    //         localStorage.setItem('allTools', JSON.stringify(tools));
+    //         setAllTools(JSON.parse(localStorage.getItem('allTools')));
+    //     } catch (err) {
+    //         console.error(`Ошибка загрузки списка средст измерения: ${err}`);
+    //     }
+    //  }
 
-    React.useEffect(() => {
-        handleToolListUpdate();
-    }, []);
+    // React.useEffect(() => {
+    //     handleToolListUpdate();
+    // }, []);
 
     // Общий список СИ
 
-    const okTools = allTools.filter((tool) => {
+    const okTools = tools.filter((tool) => {
         return (tool.toolCalibrationStatus.toLowerCase().includes('годен'.toLowerCase()) && 
                 !tool.toolCalibrationStatus.toLowerCase().includes('не'.toLowerCase())
         );
     })
 
-    const notOkTools = allTools.filter((tool) => {
+    const notOkTools = tools.filter((tool) => {
         return (tool.toolCalibrationStatus.toLowerCase().includes('не годен'.toLowerCase()));
     })
 
-    const usingTools = allTools.filter((tool) => {
+    const usingTools = tools.filter((tool) => {
         return (tool.toolCondition.toLowerCase().includes('используется'.toLowerCase()));
     })
 
-    const checkingTools = allTools.filter((tool) => {
-        return (tool.toolCondition.toLowerCase().includes('на поверке'.toLowerCase()));
+    const checkingTools = tools.filter((tool) => {
+        return (tool.toolCondition.toLowerCase().includes('поверка/калибровка'.toLowerCase()));
     })
 
-    const brokenTools = allTools.filter((tool) => {
+    const brokenTools = tools.filter((tool) => {
         return (tool.toolCondition.toLowerCase().includes('сломан'.toLowerCase()));
     })
 
-    const lostTools = allTools.filter((tool) => {
+    const lostTools = tools.filter((tool) => {
         return (tool.toolCondition.toLowerCase().includes('утерян'.toLowerCase()));
     })
 
-    const scrapedTools = allTools.filter((tool) => {
+    const scrapedTools = tools.filter((tool) => {
         return (tool.toolCondition.toLowerCase().includes('утилизирован'.toLowerCase()));
     })
 
-    const spareTools = allTools.filter((tool) => {
+    const spareTools = tools.filter((tool) => {
         return (tool.toolCondition.toLowerCase().includes('на хранении'.toLowerCase()));
     })
 
     // Список СИ конкретного подразделения
 
-    const departmentAllTools = allTools.filter((tool) => {
+    const departmentAllTools = tools.filter((tool) => {
         return (tool.toolOwnerDept.toLowerCase().includes(department.shortNameEN.toLowerCase()));
     })
 

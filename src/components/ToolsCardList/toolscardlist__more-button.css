@@ -1,0 +1,22 @@
+.toolscardlist__more-button {
+    padding: 0;
+    display: block;
+    margin: 30px auto 60px;
+    width: 320px;
+    height: 36px;
+    background-color: transparent;
+    border: 1px solid #424242;
+    font-family: 'Inter', Arial, sans-serif;
+    font-style: normal;
+    font-size: 14px;
+    font-weight: 500;
+    color: #fff;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+}
+
+
+.toolscardlist__more-button:hover {
+    background-color: #2f2f2f;
+ }

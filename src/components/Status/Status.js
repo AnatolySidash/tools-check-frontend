@@ -2,7 +2,7 @@ import React from 'react';
 import Header from '../Header/Header.js';
 import Department from './../Department/Department.js';
 
-function Status({ departments, isLoggedIn, onDepartmentClick, selectedDepartment }) {
+function Status({ tools, departments, isLoggedIn, onDepartmentClick, selectedDepartment }) {
 
    return (
       <>
@@ -14,6 +14,7 @@ function Status({ departments, isLoggedIn, onDepartmentClick, selectedDepartment
             <h1 className='status__title'>Ключевые показатели подразделений</h1>
             {departments.map((department) => (
                   <Department
+                     tools={tools}
                      key={department._id}
                      department={department}
                      selectedDepartment={selectedDepartment}

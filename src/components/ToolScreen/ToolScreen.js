@@ -48,7 +48,7 @@ function ToolScreen({ tool, onClose, isOpen, setTools, isToolInfoUpdated, setToo
             setToolRemainUsagePeriod(checkDayDifference());
             setToolCertificateNo(tool.toolCertificateNo);
             setToolCondition(tool.toolCondition);
-            setToolCalibrationStatus(tool.toolCalibrationStatus);
+            setToolCalibrationStatus(changeToolCalibrationStatus());
             setToolCurrentLocation(tool.toolCurrentLocation);
             setToolUsageLocation(tool.toolUsageLocation);
             setToolInstalledLocation(tool.toolInstalledLocation);

@@ -34,17 +34,18 @@
 @import url(./components/Navigation/navigation__button_green.css);
 @import url(./components/Navigation/navigation__button_gray.css);
 
-/* ------GasTools------ */
+/* ------Tools------ */
 
 @import url(./components/Tools/tools.css);
 
-/* ------GasToolsCardList------ */
+/* ------ToolsCardList------ */
 
 @import url(./components/ToolsCardList/toolscardlist.css);
 @import url(./components/ToolsCardList/toolscardlist__list.css);
 @import url(./components/ToolsCardList/toolscardlist__item.css);
 @import url(./components/ToolsCardList/toolscardlist__title.css);
 @import url(./components/ToolsCardList/toolscardlist__button.css);
+@import url(./components/ToolsCardList/toolscardlist__more-button.css);
 
 /* ------ToolsCard------ */
 
