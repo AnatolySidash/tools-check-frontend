@@ -3,7 +3,7 @@ import Header from '../Header/Header.js';
 import ToolsCardList from '../ToolsCardList/ToolsCardList.js';
 import SearchForm from '../SearchForm/SearchForm.js';
 
-function Tools({ isLoggedIn, tools, setTools, onToolClick, onNewToolAdd }) {
+function Tools({ isLoggedIn, tools, setTools, onToolClick, onNewToolAdd, localDB }) {
 
     return (
        <>
@@ -14,6 +14,7 @@ function Tools({ isLoggedIn, tools, setTools, onToolClick, onNewToolAdd }) {
                 <SearchForm 
                   setTools={setTools}
                   tools={tools}
+                  localDB={localDB}
                 />
                 <ToolsCardList 
                   tools={tools}

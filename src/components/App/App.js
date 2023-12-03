@@ -14,6 +14,9 @@ import { ProtectedRoute } from '../ProtectedRoute/ProtectedRoute.js';
 import * as auth from '../../utils/Auth.js';
 import DepartmentScreen from '../DepartmentScreen/DepartmentScreen.js';
 import { DEPARTMENTS } from '../../utils/Constants.js';
+// import Localbase from 'localbase';
+import { database } from '../../utils/Database.js';
+// import { useLiveQuery } from 'dexie-react-hooks';
 
 function App() {
 
@@ -29,6 +32,12 @@ function App() {
     const [isNewToolAdded, setNewToolAdded] = React.useState(false)
     const [isToolInfoDeleted, setToolInfoDeleted] = React.useState(false)
     const departments = DEPARTMENTS;
+    // let dataBase = new Localbase('db');
+    // dataBase.config.debug = false;
+
+    const localDB = database;
+
+    // const allTools = useLiveQuery(() => localDB.tools.toArray(), []);
 
     const navigate = useNavigate();
 
@@ -89,26 +98,47 @@ function App() {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
-    React.useEffect(() => {
-        mainApi.getTools().then((tools) => {
-            const allTools = tools.map((tool) => {
-                const todayDate = new Date();
-                const nextCheckDate = new Date(tool.toolNextCheckDate);
-                const dayDifference = Math.round((nextCheckDate - todayDate) / (60 * 60 * 24 * 1000));
-                if (dayDifference > 0) {
-                    tool.toolCalibrationStatus = 'Годен';
-                } else {
-                    tool.toolCalibrationStatus = 'Не годен';
-                }
-                return tool;
-            });
-            setTools(allTools);
-        })
-          .catch((err) => {
-            console.error(`Ошибка получения средств измерения: ${err}`);
-          });
-    }, [isToolScreenOpen, isNewToolScreenOpen, isToolInfoUpdated, isNewToolAdded, isToolInfoDeleted, selectedTool, setTools]); 
+    async function getAllTools() {
+        const receivedData = await mainApi.getTools();
+        return receivedData;
+    }
+    
+    async function updateToolsData(receivedData) {
+        const updatedData = receivedData.map((tool) => {
+            const todayDate = new Date();
+            const nextCheckDate = new Date(tool.toolNextCheckDate);
+            const dayDifference = Math.round((nextCheckDate - todayDate) / (60 * 60 * 24 * 1000));
+            if (dayDifference > 0) {
+                tool.toolCalibrationStatus = 'Годен';
+            } else {
+                tool.toolCalibrationStatus = 'Не годен';
+            }
+            return tool;
+        });
+        setTools(updatedData);
+        return updatedData;
+    }
 
+    async function clearDataBase() {
+        await localDB.tools.clear();
+    }
+    
+    async function setToDataBase(updatedData) {
+        await localDB.tools.bulkPut(updatedData);
+    }
+    
+    React.useEffect(() => {
+        async function updateAndSetData() {
+            const receivedData = await getAllTools();
+            const updatedData = await updateToolsData(receivedData);
+            await clearDataBase();
+            await setToDataBase(updatedData);
+            console.log('Data uploaded');
+        }
+        updateAndSetData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [isToolScreenOpen, isNewToolScreenOpen, isToolInfoUpdated, isNewToolAdded, isToolInfoDeleted, selectedTool, setTools])
+    
     function logout() {
         auth.clearCookie()
           .then((res) => {
@@ -141,6 +171,7 @@ function App() {
                                     setTools={setTools}
                                     onToolClick={handleToolClick}
                                     onNewToolAdd={handleNewToolClick}
+                                    localDB={localDB}
                                 />}
                             isLoggedIn={isLoggedIn} />
                         } />

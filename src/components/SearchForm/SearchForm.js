@@ -1,10 +1,9 @@
 import React from 'react';
 import FileSaver from '../../utils/FileSaver.js';
 import * as XLSX from 'xlsx';
-import { EXCEL_TYPE, EXCEL_EXTENSION } from '../../utils/Constants.js'
-// import Localbase from 'localbase';
+import { EXCEL_TYPE, EXCEL_EXTENSION } from '../../utils/Constants.js';
 
-function SearchForm({ tools, setTools }) {
+function SearchForm({ tools, setTools, dataBase }) {
 
    const [inputValue, setInputValue] = React.useState('');
    const [isInputEmpty, setInputEmpty] = React.useState(false);
@@ -12,7 +11,7 @@ function SearchForm({ tools, setTools }) {
    const [isOkCheckboxChecked, setOkCheckboxChecked] = React.useState(false);
    const [isNotOkCheckboxChecked, setNotOkCheckboxChecked] = React.useState(false);
    const [notFirstRender, setNotFirstRender] = React.useState(false);
-   const toolList = JSON.parse(localStorage.getItem('filteredTools'))
+   const toolList = dataBase.collection('filteredTools').get();
 
    function handleInputValueChange(event) {
       setInputValue(event.target.value);
@@ -25,11 +24,6 @@ function SearchForm({ tools, setTools }) {
    function handleNotOkCheckboxChange(event) {
       setNotOkCheckboxChecked(event.target.checked);
    }
-
-   React.useEffect(() => {
-      localStorage.setItem('allTools', JSON.stringify(tools));
-   // eslint-disable-next-line react-hooks/exhaustive-deps
-   }, []);
 
    React.useEffect(() => {
       if (localStorage.getItem('inputValue')) {
@@ -55,15 +49,6 @@ function SearchForm({ tools, setTools }) {
       }
    }, []);
 
-   // React.useEffect(() => {
-   //    if (localStorage.getItem('filteredTools')) {
-   //       setTools(JSON.parse(localStorage.getItem('filteredTools')));
-   //    } else {
-   //       setTools([]);
-   //    }
-   // // eslint-disable-next-line react-hooks/exhaustive-deps
-   // }, []);
-
    React.useEffect(() => {
       setTimeout(() => {
          setNotFirstRender(true);
@@ -74,9 +59,9 @@ function SearchForm({ tools, setTools }) {
       event.preventDefault();
 
       try {
-            localStorage.setItem('allTools', JSON.stringify(tools));
+
          if (inputValue) {
-            const allTools = JSON.parse(localStorage.getItem('allTools'));
+            let allTools = await dataBase.collection('allTools').get();
             const filteredTools = allTools.filter((tool) => {
                return (
                   tool.toolId.toLowerCase().includes(inputValue.toLowerCase()) || 
@@ -88,12 +73,12 @@ function SearchForm({ tools, setTools }) {
                );
             })
 
-            localStorage.setItem('filteredTools', JSON.stringify(filteredTools));
+            await dataBase.collection('filteredTools').set(filteredTools);
             localStorage.setItem('inputValue', inputValue);
             setSearchMade(true);
 
             if (filteredTools.length > 0) {
-               setTools(JSON.parse(localStorage.getItem('filteredTools')));
+               setTools(filteredTools);
             } else {
                setTools([]);
             }
@@ -108,70 +93,76 @@ function SearchForm({ tools, setTools }) {
 
    React.useEffect(() => {
       if (notFirstRender) {
-         const tools = JSON.parse(localStorage.getItem('allTools'));
-         const filteredTools = tools.filter((tool) => {
-            if (isOkCheckboxChecked) {
-               return (
-                  (tool.toolCalibrationStatus === 'Годен') &&
-                  (tool.toolId.toLowerCase().includes(inputValue.toLowerCase()) || 
+         async function getData() {
+            let allTools = await dataBase.collection('allTools').get();
+            const filteredTools = allTools.filter((tool) => {
+               if (isOkCheckboxChecked) {
+                  return (
+                     (tool.toolCalibrationStatus === 'Годен') &&
+                     (tool.toolId.toLowerCase().includes(inputValue.toLowerCase()) || 
+                        tool.toolNameRU.toLowerCase().includes(inputValue.toLowerCase()) ||
+                        tool.toolOwnerDept.toLowerCase().includes(inputValue.toLowerCase()) ||
+                        tool.toolOwnerName.toLowerCase().includes(inputValue.toLowerCase()))
+                  );
+               } else {
+                  return (
+                     tool.toolId.toLowerCase().includes(inputValue.toLowerCase()) || 
                      tool.toolNameRU.toLowerCase().includes(inputValue.toLowerCase()) ||
+                     tool.toolCalibrationStatus.toLowerCase().includes(inputValue.toLowerCase()) ||
                      tool.toolOwnerDept.toLowerCase().includes(inputValue.toLowerCase()) ||
-                     tool.toolOwnerName.toLowerCase().includes(inputValue.toLowerCase()))
-               );
+                     tool.toolOwnerName.toLowerCase().includes(inputValue.toLowerCase())
+                  );
+               }
+            })
+            dataBase.collection('filteredTools').set(filteredTools);
+            localStorage.setItem('inputValue', inputValue);
+            localStorage.setItem('okcheckboxState', isOkCheckboxChecked);
+   
+            if (filteredTools.length > 0) {
+               setTools(filteredTools);
             } else {
-               return (
-                  tool.toolId.toLowerCase().includes(inputValue.toLowerCase()) || 
-                  tool.toolNameRU.toLowerCase().includes(inputValue.toLowerCase()) ||
-                  tool.toolCalibrationStatus.toLowerCase().includes(inputValue.toLowerCase()) ||
-                  tool.toolOwnerDept.toLowerCase().includes(inputValue.toLowerCase()) ||
-                  tool.toolOwnerName.toLowerCase().includes(inputValue.toLowerCase())
-               );
+               setTools([]);
             }
-         })
-         localStorage.setItem('filteredTools', JSON.stringify(filteredTools));
-         localStorage.setItem('inputValue', inputValue);
-         localStorage.setItem('okcheckboxState', isOkCheckboxChecked);
-
-         if (filteredTools.length > 0) {
-            setTools(filteredTools);
-         } else {
-            setTools([]);
          }
+         getData();
       }
       //eslint-disable-next-line
    }, [isOkCheckboxChecked]);
 
    React.useEffect(() => {
       if (notFirstRender) {
-         const tools = JSON.parse(localStorage.getItem('allTools'));
-         const filteredTools = tools.filter((tool) => {
-            if (isNotOkCheckboxChecked) {
-               return (
-                  (tool.toolCalibrationStatus === 'Не годен') &&
-                  (tool.toolId.toLowerCase().includes(inputValue.toLowerCase()) || 
+         async function getData() {
+            const allTools = await dataBase.collection('allTools').get();
+            const filteredTools = allTools.filter((tool) => {
+               if (isNotOkCheckboxChecked) {
+                  return (
+                     (tool.toolCalibrationStatus === 'Не годен') &&
+                     (tool.toolId.toLowerCase().includes(inputValue.toLowerCase()) || 
+                        tool.toolNameRU.toLowerCase().includes(inputValue.toLowerCase()) ||
+                        tool.toolOwnerDept.toLowerCase().includes(inputValue.toLowerCase()) ||
+                        tool.toolOwnerName.toLowerCase().includes(inputValue.toLowerCase()))
+                  );
+               } else {
+                  return (
+                     tool.toolId.toLowerCase().includes(inputValue.toLowerCase()) || 
                      tool.toolNameRU.toLowerCase().includes(inputValue.toLowerCase()) ||
+                     tool.toolCalibrationStatus.toLowerCase().includes(inputValue.toLowerCase()) ||
                      tool.toolOwnerDept.toLowerCase().includes(inputValue.toLowerCase()) ||
-                     tool.toolOwnerName.toLowerCase().includes(inputValue.toLowerCase()))
-               );
+                     tool.toolOwnerName.toLowerCase().includes(inputValue.toLowerCase())
+                  );
+               }
+            })
+            dataBase.collection('filteredTools').set(filteredTools);
+            localStorage.setItem('inputValue', inputValue);
+            localStorage.setItem('notokcheckboxState', isNotOkCheckboxChecked);
+   
+            if (filteredTools.length > 0) {
+               setTools(filteredTools);
             } else {
-               return (
-                  tool.toolId.toLowerCase().includes(inputValue.toLowerCase()) || 
-                  tool.toolNameRU.toLowerCase().includes(inputValue.toLowerCase()) ||
-                  tool.toolCalibrationStatus.toLowerCase().includes(inputValue.toLowerCase()) ||
-                  tool.toolOwnerDept.toLowerCase().includes(inputValue.toLowerCase()) ||
-                  tool.toolOwnerName.toLowerCase().includes(inputValue.toLowerCase())
-               );
+               setTools([]);
             }
-         })
-         localStorage.setItem('filteredTools', JSON.stringify(filteredTools));
-         localStorage.setItem('inputValue', inputValue);
-         localStorage.setItem('notokcheckboxState', isNotOkCheckboxChecked);
-
-         if (filteredTools.length > 0) {
-            setTools(filteredTools);
-         } else {
-            setTools([]);
          }
+         getData();
       }
       //eslint-disable-next-line
    }, [isNotOkCheckboxChecked]);
