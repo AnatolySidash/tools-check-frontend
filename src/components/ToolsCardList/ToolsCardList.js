@@ -43,10 +43,25 @@ function ToolsCardList({ tools, onToolClick, onClose, onNewToolAdd }) {
         // eslint-disable-next-line react-hooks/exhaustive-deps
      }, [screenWidth])
 
+     const okTools = tools.filter((tool) => {
+        return (tool.toolCalibrationStatus.toLowerCase().includes('годен'.toLowerCase()) && 
+                !tool.toolCalibrationStatus.toLowerCase().includes('не'.toLowerCase())
+        );
+    })
+    
+    const notOkTools = tools.filter((tool) => {
+        return (tool.toolCalibrationStatus.toLowerCase().includes('не годен'.toLowerCase()));
+    })
+
     return (
         <>
             <section className="toolscardlist">
                 <h1 className='toolscardlist__title'>Средства измерения</h1>
+                <ul className='toolscardlist__block'>
+                    <li className='toolscardlist__data'>Всего: {tools.length}</li>
+                    <li className='toolscardlist__data'>Годные: {okTools.length}</li>
+                    <li className='toolscardlist__data'>Не годные: {notOkTools.length}</li>
+                </ul>
                 <button type='button' className='toolscardlist__button' onClick={onNewToolAdd}>Добавить новое СИ</button>
                 <ul className='toolscardlist__list'>
                     <li className="toolscardlist__item">

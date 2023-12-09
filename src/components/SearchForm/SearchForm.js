@@ -3,7 +3,7 @@ import FileSaver from '../../utils/FileSaver.js';
 import * as XLSX from 'xlsx';
 import { EXCEL_TYPE, EXCEL_EXTENSION } from '../../utils/Constants.js';
 
-function SearchForm({ tools, setTools, dataBase }) {
+function SearchForm({ tools, setTools, localDB }) {
 
    const [inputValue, setInputValue] = React.useState('');
    const [isInputEmpty, setInputEmpty] = React.useState(false);
@@ -11,7 +11,6 @@ function SearchForm({ tools, setTools, dataBase }) {
    const [isOkCheckboxChecked, setOkCheckboxChecked] = React.useState(false);
    const [isNotOkCheckboxChecked, setNotOkCheckboxChecked] = React.useState(false);
    const [notFirstRender, setNotFirstRender] = React.useState(false);
-   const toolList = dataBase.collection('filteredTools').get();
 
    function handleInputValueChange(event) {
       setInputValue(event.target.value);
@@ -50,10 +49,25 @@ function SearchForm({ tools, setTools, dataBase }) {
    }, []);
 
    React.useEffect(() => {
+      async function getData() {
+         setTools(await localDB.tools.toArray());
+      }
+      getData();
+   // eslint-disable-next-line react-hooks/exhaustive-deps
+   }, []);
+
+   React.useEffect(() => {
       setTimeout(() => {
          setNotFirstRender(true);
       }, 100);
    }, []);
+
+   async function removeFilter() {
+      setInputValue('');
+      setTools(await localDB.tools.toArray());
+      setOkCheckboxChecked(false);
+      setNotOkCheckboxChecked(false)
+   }
 
    async function handleSearchToolsSubmit(event) {
       event.preventDefault();
@@ -61,7 +75,7 @@ function SearchForm({ tools, setTools, dataBase }) {
       try {
 
          if (inputValue) {
-            let allTools = await dataBase.collection('allTools').get();
+            let allTools = await localDB.tools.toArray();
             const filteredTools = allTools.filter((tool) => {
                return (
                   tool.toolId.toLowerCase().includes(inputValue.toLowerCase()) || 
@@ -73,7 +87,8 @@ function SearchForm({ tools, setTools, dataBase }) {
                );
             })
 
-            await dataBase.collection('filteredTools').set(filteredTools);
+            await localDB.filteredTools.clear();
+            await localDB.filteredTools.bulkPut(filteredTools);
             localStorage.setItem('inputValue', inputValue);
             setSearchMade(true);
 
@@ -94,7 +109,7 @@ function SearchForm({ tools, setTools, dataBase }) {
    React.useEffect(() => {
       if (notFirstRender) {
          async function getData() {
-            let allTools = await dataBase.collection('allTools').get();
+            let allTools = await localDB.tools.toArray();
             const filteredTools = allTools.filter((tool) => {
                if (isOkCheckboxChecked) {
                   return (
@@ -114,7 +129,8 @@ function SearchForm({ tools, setTools, dataBase }) {
                   );
                }
             })
-            dataBase.collection('filteredTools').set(filteredTools);
+            await localDB.filteredTools.clear();
+            await localDB.filteredTools.bulkPut(filteredTools);
             localStorage.setItem('inputValue', inputValue);
             localStorage.setItem('okcheckboxState', isOkCheckboxChecked);
    
@@ -132,7 +148,7 @@ function SearchForm({ tools, setTools, dataBase }) {
    React.useEffect(() => {
       if (notFirstRender) {
          async function getData() {
-            const allTools = await dataBase.collection('allTools').get();
+            const allTools = await localDB.tools.toArray();
             const filteredTools = allTools.filter((tool) => {
                if (isNotOkCheckboxChecked) {
                   return (
@@ -152,7 +168,8 @@ function SearchForm({ tools, setTools, dataBase }) {
                   );
                }
             })
-            dataBase.collection('filteredTools').set(filteredTools);
+            await localDB.filteredTools.clear();
+            await localDB.filteredTools.bulkPut(filteredTools);
             localStorage.setItem('inputValue', inputValue);
             localStorage.setItem('notokcheckboxState', isNotOkCheckboxChecked);
    
@@ -169,8 +186,13 @@ function SearchForm({ tools, setTools, dataBase }) {
 
    // Выгрузка в Эксель
 
-   function downloadAsExcel() {
-      const worksheet = XLSX.utils.json_to_sheet(toolList);
+   async function getDataForDownload() {
+      const toolList = await localDB.filteredTools.toArray();
+      return toolList;
+   }
+
+   async function downloadAsExcel() {
+      const worksheet = XLSX.utils.json_to_sheet(await getDataForDownload());
       const workbook = {
           Sheets: {
               'data' : worksheet
@@ -221,6 +243,7 @@ function SearchForm({ tools, setTools, dataBase }) {
                }
                <label
                   htmlFor="okcheckbox__input"
+                  id='okcheckbox__id'
                   className='searchform__label'>Годные</label>
                {isNotOkCheckboxChecked === 'true' ?
                <input
@@ -239,7 +262,9 @@ function SearchForm({ tools, setTools, dataBase }) {
                }
                <label
                   htmlFor="notokcheckbox__input"
+                  id='notokcheckbox__id'
                   className='searchform__label'>Не годные</label>
+               <button type='button' className='searchform__clear-button' onClick={removeFilter}>Снять все фильтры</button>
             </fieldset>
             {isInputEmpty && <span className="searchform__input-error">Нужно ввести ключевое слово</span>}
          </form >

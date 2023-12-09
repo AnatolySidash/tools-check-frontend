@@ -14,9 +14,7 @@ import { ProtectedRoute } from '../ProtectedRoute/ProtectedRoute.js';
 import * as auth from '../../utils/Auth.js';
 import DepartmentScreen from '../DepartmentScreen/DepartmentScreen.js';
 import { DEPARTMENTS } from '../../utils/Constants.js';
-// import Localbase from 'localbase';
 import { database } from '../../utils/Database.js';
-// import { useLiveQuery } from 'dexie-react-hooks';
 
 function App() {
 
@@ -31,13 +29,10 @@ function App() {
     const [isToolInfoUpdated, setToolInfoUpdated] = React.useState(false);
     const [isNewToolAdded, setNewToolAdded] = React.useState(false)
     const [isToolInfoDeleted, setToolInfoDeleted] = React.useState(false)
+    
     const departments = DEPARTMENTS;
-    // let dataBase = new Localbase('db');
-    // dataBase.config.debug = false;
-
     const localDB = database;
-
-    // const allTools = useLiveQuery(() => localDB.tools.toArray(), []);
+    const [submitButtonActive, setSubmitDataActive] = React.useState(false);
 
     const navigate = useNavigate();
 
@@ -66,6 +61,7 @@ function App() {
         setToolInfoUpdated(false);
         setNewToolAdded(false);
         setToolInfoDeleted(false);
+        setSubmitDataActive(false);
     }
 
     React.useEffect(() => {
@@ -121,6 +117,7 @@ function App() {
 
     async function clearDataBase() {
         await localDB.tools.clear();
+        await localDB.filteredTools.clear();
     }
     
     async function setToDataBase(updatedData) {
@@ -137,8 +134,8 @@ function App() {
         }
         updateAndSetData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [isToolScreenOpen, isNewToolScreenOpen, isToolInfoUpdated, isNewToolAdded, isToolInfoDeleted, selectedTool, setTools])
-    
+    }, [isToolInfoUpdated, isNewToolAdded, isToolInfoDeleted, selectedTool, setTools])
+
     function logout() {
         auth.clearCookie()
           .then((res) => {
@@ -218,6 +215,8 @@ function App() {
                         setToolInfoUpdated={setToolInfoUpdated}
                         isToolInfoDeleted={isToolInfoDeleted}
                         setToolInfoDeleted={setToolInfoDeleted}
+                        submitButtonActive={submitButtonActive}
+                        setSubmitDataActive={setSubmitDataActive}
                     />
 
                     <DepartmentScreen

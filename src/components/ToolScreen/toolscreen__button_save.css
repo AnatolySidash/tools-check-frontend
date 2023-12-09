@@ -1,0 +1,8 @@
+.toolscreen__button_save {
+    background-color: #1d8f19;
+    min-width: 146px;
+}
+
+.toolscreen__button_save:disabled {
+    background-color: #858b85;
+}

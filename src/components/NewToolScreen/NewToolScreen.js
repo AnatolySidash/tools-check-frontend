@@ -1,19 +1,20 @@
 import React from 'react';
 import mainApi from '../../utils/MainApi.js';
+import { useInput } from '../../utils/Validation.js';
 
 function NewToolScreen({ onClose, isOpen, setSelectedTool, isNewToolAdded, setNewToolAdded }) {
 
     const [toolNameRU, setNameRU] = React.useState('');
     const [toolNameEN, setNameEN] = React.useState('');
+    const [toolModel, setToolModel] = React.useState('');
     const [toolId, setToolId] = React.useState('');
+    const [toolType, setToolType] = React.useState('');
     const [toolManufacturer, setToolManufacturer] = React.useState('');
     const [toolSerialNo, setToolSerialNo] = React.useState('');
     const [toolRegisterNo, setToolRegisterNo] = React.useState('');
     const [toolParameters, setToolParameters] = React.useState('');
-    const [toolReceiveDate, setToolReceiveDate] = React.useState('');
     const [toolCheckDate, setToolCheckDate] = React.useState('');
-    const [toolReadyDate, setToolReadyDate] = React.useState('');
-    const [toolReleaseDate, setToolReleaseDate] = React.useState('');
+    const [toolCategory, setToolCategory] = React.useState('');
     const [toolNextCheckDate, setToolNextCheckDate] = React.useState('');
     const [toolUsagePeriod, setToolUsagePeriod] = React.useState('');
     const [toolRemainUsagePeriod, setToolRemainUsagePeriod] = React.useState('');
@@ -22,12 +23,25 @@ function NewToolScreen({ onClose, isOpen, setSelectedTool, isNewToolAdded, setNe
     const [toolCalibrationStatus, setToolCalibrationStatus] = React.useState('');
     const [toolCurrentLocation, setToolCurrentLocation] = React.useState('');
     const [toolUsageLocation, setToolUsageLocation] = React.useState('');
+    const [toolInstalledLocation, setToolInstalledLocation] = React.useState('');
     const [toolOwnerDept, setToolOwnerDept] = React.useState('');
     const [toolOwnerSection, setToolOwnerSection] = React.useState('');
     const [toolOwnerName, setToolOwnerName] = React.useState('');
     const [toolCheckCompany, setToolCheckCompany] = React.useState('');
-    const [toolCheckCost, setToolCheckCost] = React.useState('');
     const [comment, setComment] = React.useState('');
+
+    // Валидация
+
+    const toolNameRUValid = useInput(toolNameRU, { isEmpty: true, minLength: 2 });
+    const toolNameENValid = useInput(toolNameEN, { isEmpty: true, minLength: 2 });
+    const toolTypeValid = useInput(toolType, { isEmpty: true });
+    const toolCategoryValid = useInput(toolCategory, { isEmpty: true });
+    const toolOwnerDeptValid = useInput(toolOwnerDept, { isEmpty: true });
+    const toolOwnerSectionValid = useInput(toolOwnerSection, { isEmpty: true });
+    const toolOwnerNameValid = useInput(toolOwnerName, { isEmpty: true, minLength: 2 });
+    const toolUsageLocationValid = useInput(toolUsageLocation, { isEmpty: true, minLength: 2 });
+    const toolCurrentLocationValid = useInput(toolCurrentLocation, { isEmpty: true, minLength: 2 });
+    const toolInstalledLocationValid = useInput(toolInstalledLocation, { isEmpty: true, minLength: 2 });
 
     function handleNextCheckDate() {
         const newDate = new Date(toolCheckDate);
@@ -50,12 +64,24 @@ function NewToolScreen({ onClose, isOpen, setSelectedTool, isNewToolAdded, setNe
         }
     }
 
-    const handleNameRuChange = (event) => {
-        setNameRU(event.target.value);
-     }
+    function handleToolUsagePeriod() {
+        if(toolUsagePeriod) {
+            setToolUsagePeriod(toolUsagePeriod);
+        } else {
+            setToolUsagePeriod(365);
+        }
+    }
 
-    const handleNameEnChange = (event) => {
-        setNameEN(event.target.value);
+    function handleToolCheckDate() {
+        if(toolCheckDate) {
+            setToolCheckDate(toolCheckDate);
+        } else {
+            setToolCheckDate(new Date().toISOString().slice(0, 10));
+        }
+    }
+
+    const handleToolModelChange = (event) => {
+        setToolModel(event.target.value);
     }
 
     const handleToolIdChange = (event) => {
@@ -78,20 +104,8 @@ function NewToolScreen({ onClose, isOpen, setSelectedTool, isNewToolAdded, setNe
         setToolParameters(event.target.value);
     }
 
-    const handleToolReceiveDateChange = (event) => {
-        setToolReceiveDate(event.target.value);
-    }
-
     const handleToolCheckDateChange = (event) => {
         setToolCheckDate(event.target.value);
-    }
-
-    const handleToolReadyDateChange = (event) => {
-        setToolReadyDate(event.target.value);
-    }
-
-    const handleToolReleaseDateChange = (event) => {
-        setToolReleaseDate(event.target.value);
     }
 
     const handleToolNextCheckDateChange = (event) => {
@@ -114,36 +128,12 @@ function NewToolScreen({ onClose, isOpen, setSelectedTool, isNewToolAdded, setNe
         setToolCondition(event.target.value);
     }
 
-    const handleToolCalibarionStatusChange = (event) => {
+    const handleToolCalibrationStatusChange = (event) => {
         setToolCalibrationStatus(event.target.value);
-    }
-
-    const handleToolCurrentLocationChange = (event) => {
-        setToolCurrentLocation(event.target.value);
-    }
-
-    const handleToolUsageLocationChange = (event) => {
-        setToolUsageLocation(event.target.value);
-    }
-
-    const handleToolOwnerDeptChange = (event) => {
-        setToolOwnerDept(event.target.value);
-    }
-
-    const handleToolOwnerSectionChange = (event) => {
-        setToolOwnerSection(event.target.value);
-    }
-
-    const handleToolOwnerNameChange = (event) => {
-        setToolOwnerName(event.target.value);
     }
 
     const handleToolCheckCompanyChange = (event) => {
         setToolCheckCompany(event.target.value);
-    }
-
-    const handleToolCheckCostChange = (event) => {
-        setToolCheckCost(event.target.value);
     }
 
     const handleCommentChange = (event) => {
@@ -153,32 +143,31 @@ function NewToolScreen({ onClose, isOpen, setSelectedTool, isNewToolAdded, setNe
     function handleNewToolAdd(event) {
         event.preventDefault();
   
-        // Передаём значения управляемых компонентов во внешний обработчик
         handleToolScreenUpdate({
-           toolNameRU: toolNameRU,
-           toolNameEN: toolNameEN,
+           toolNameRU: toolNameRUValid.value,
+           toolNameEN: toolNameENValid.value,
+           toolModel: toolModel,
            toolId: toolId,
+           toolType: toolTypeValid.value,
            toolManufacturer: toolManufacturer,
            toolSerialNo: toolSerialNo,
            toolRegisterNo: toolRegisterNo,
            toolParameters: toolParameters,
-           toolReceiveDate: toolReceiveDate,
-           toolCheckDate: toolCheckDate,
-           toolReadyDate: toolReadyDate,
-           toolReleaseDate: toolReleaseDate,
+           toolCheckDate: handleToolCheckDate(),
+           toolCategory: toolCategoryValid.value,
            toolNextCheckDate: handleNextCheckDate(),
-           toolUsagePeriod: toolUsagePeriod,
+           toolUsagePeriod: handleToolUsagePeriod(),
            toolRemainUsagePeriod: toolRemainUsagePeriod,
            toolCertificateNo: toolCertificateNo,
            toolCondition: toolCondition,
            toolCalibrationStatus: changeToolCalibrationStatus(),
-           toolCurrentLocation: toolCurrentLocation,
-           toolUsageLocation: toolUsageLocation,
-           toolOwnerDept: toolOwnerDept,
-           toolOwnerSection: toolOwnerSection,
-           toolOwnerName: toolOwnerName,
+           toolCurrentLocation: toolCurrentLocationValid.value,
+           toolUsageLocation: toolUsageLocationValid.value,
+           toolInstalledLocation: toolInstalledLocationValid.value,
+           toolOwnerDept: toolOwnerDeptValid.value,
+           toolOwnerSection: toolOwnerSectionValid.value,
+           toolOwnerName: toolOwnerNameValid.value,
            toolCheckCompany: toolCheckCompany,
-           toolCheckCost: toolCheckCost,
            comment: comment,
         });
     }
@@ -187,15 +176,15 @@ function NewToolScreen({ onClose, isOpen, setSelectedTool, isNewToolAdded, setNe
         {
             toolNameRU,
             toolNameEN,
+            toolModel,
             toolId,
+            toolType,
             toolManufacturer,
             toolSerialNo,
             toolRegisterNo,
             toolParameters,
-            toolReceiveDate,
             toolCheckDate,
-            toolReadyDate,
-            toolReleaseDate,
+            toolCategory,
             toolNextCheckDate,
             toolUsagePeriod,
             toolRemainUsagePeriod,
@@ -204,25 +193,25 @@ function NewToolScreen({ onClose, isOpen, setSelectedTool, isNewToolAdded, setNe
             toolCalibrationStatus,
             toolCurrentLocation,
             toolUsageLocation,
+            toolInstalledLocation,
             toolOwnerDept,
             toolOwnerSection,
             toolOwnerName,
             toolCheckCompany,
-            toolCheckCost,
             comment,
         }) {
             const tool = {
                 toolNameRU,
                 toolNameEN,
+                toolModel,
                 toolId,
+                toolType,
                 toolManufacturer,
                 toolSerialNo,
                 toolRegisterNo,
                 toolParameters,
-                toolReceiveDate,
                 toolCheckDate,
-                toolReadyDate,
-                toolReleaseDate,
+                toolCategory,
                 toolNextCheckDate,
                 toolUsagePeriod,
                 toolRemainUsagePeriod,
@@ -231,11 +220,11 @@ function NewToolScreen({ onClose, isOpen, setSelectedTool, isNewToolAdded, setNe
                 toolCalibrationStatus,
                 toolCurrentLocation,
                 toolUsageLocation,
+                toolInstalledLocation,
                 toolOwnerDept,
                 toolOwnerSection,
                 toolOwnerName,
                 toolCheckCompany,
-                toolCheckCost,
                 comment
             }
         mainApi.addTool(tool)
@@ -252,64 +241,82 @@ function NewToolScreen({ onClose, isOpen, setSelectedTool, isNewToolAdded, setNe
          });
       }
 
-      function handleFormClear() {
-        setNameRU('');
-        setNameEN('');
-        setToolId('');
-        setToolManufacturer('');
-        setToolSerialNo('');
-        setToolRegisterNo('');
-        setToolParameters('');
-        setToolReceiveDate('');
-        setToolCheckDate('');
-        setToolReadyDate('');
-        setToolReleaseDate('');
-        setToolNextCheckDate('');
-        setToolUsagePeriod('');
-        setToolRemainUsagePeriod('');
-        setToolCertificateNo('');
-        setToolCondition('');
-        setToolCalibrationStatus('');
-        setToolCurrentLocation();
-        setToolUsageLocation('');
-        setToolOwnerDept('');
-        setToolOwnerSection('');
-        setToolOwnerName('');
-        setToolCheckCompany('');
-        setToolCheckCost('');
-        setComment('');
-      }
+    //   function handleFormClear() {
+    //     setNameRU('');
+    //     setNameEN('');
+    //     setToolModel('')
+    //     setToolId('');
+    //     setToolType('');
+    //     setToolManufacturer('');
+    //     setToolSerialNo('');
+    //     setToolRegisterNo('');
+    //     setToolParameters('');
+    //     setToolCheckDate('');
+    //     setToolCategory('');
+    //     setToolNextCheckDate('');
+    //     setToolUsagePeriod('');
+    //     setToolRemainUsagePeriod('');
+    //     setToolCertificateNo('');
+    //     setToolCondition('');
+    //     setToolCalibrationStatus('');
+    //     setToolCurrentLocation();
+    //     setToolUsageLocation('');
+    //     setToolInstalledLocation('');
+    //     setToolOwnerDept('');
+    //     setToolOwnerSection('');
+    //     setToolOwnerName('');
+    //     setToolCheckCompany('');
+    //     setComment('');
+    //   }
 
    return (
     <main className={`toolscreen ${isOpen ? 'toolscreen_opened' : ''}`}>
          <h1 className="toolscreen__title">Карточка средства измерения</h1>
          <form id='newToolForm' className="toolscreen__form" onSubmit={handleNewToolAdd}>
             <fieldset className='toolscreen__block'>
-                <label htmlFor='newNameRU' className="toolscreen__item">Название RU</label>
+                <label htmlFor='newNameRU' className="toolscreen__item">Название RU*</label>
                 <textarea 
                     id='newNameRU' 
                     name='newNameRU'
-                    className="toolscreen__input toolscreen__input_textarea"
+                    className="toolscreen__input toolscreen__input_user toolscreen__input_textarea"
                     type="text"
-                    value={toolNameRU}
+                    value={toolNameRUValid.value}
                     placeholder="Название на русском языке"
                     minLength={2}
-                    maxLength={80}
-                    onChange={handleNameRuChange}
+                    maxLength={150}
+                    onChange={(e) => toolNameRUValid.onChange(e)}
+                    onBlur={(e) => toolNameRUValid.onBlur(e)}
                     required>
                 </textarea>
-                <label htmlFor='newNameEN' className="toolscreen__item">Название EN</label>
+                {(toolNameRUValid.isDirty && toolNameRUValid.isEmpty) && <span className="toolscreen__input-error">Поле не может быть пустым</span>}
+                {(toolNameRUValid.isDirty && toolNameRUValid.minLengthError) && <span className="toolscreen__input-error">Не менее 2-х символов</span>}
+                <label htmlFor='newNameEN' className="toolscreen__item">Название EN*</label>
                 <input 
                     id='newNameEN'
                     name='newNameEN'
-                    className="toolscreen__input"
+                    className="toolscreen__input toolscreen__input_user"
                     type="text"
-                    value={toolNameEN}
+                    value={toolNameENValid.value}
                     placeholder="Название на английском языке"
                     minLength={2}
-                    maxLength={40}
-                    onChange={handleNameEnChange}
+                    maxLength={100}
+                    onChange={(e) => toolNameENValid.onChange(e)}
+                    onBlur={(e) => toolNameENValid.onBlur(e)}
                     required>
+                </input>
+                {(toolNameENValid.isDirty && toolNameENValid.isEmpty) && <span className="toolscreen__input-error">Поле не может быть пустым</span>}
+                {(toolNameENValid.isDirty && toolNameENValid.minLengthError) && <span className="toolscreen__input-error">Не менее 2-х символов</span>}
+                <label htmlFor='newModel' className="toolscreen__item">Модель СИ</label>
+                <input 
+                    id='newModel'
+                    name='newModel'
+                    className="toolscreen__input toolscreen__input_user"
+                    type="text"
+                    value={toolModel}
+                    placeholder="Например: ДМ2005Ф"
+                    minLength={2}
+                    maxLength={100}
+                    onChange={handleToolModelChange}>
                 </input>
                 <label htmlFor='newIdNo' className="toolscreen__item">Идентификационный номер</label>
                 <input 
@@ -320,9 +327,9 @@ function NewToolScreen({ onClose, isOpen, setSelectedTool, isNewToolAdded, setNe
                     value={toolId}
                     placeholder="Например такой: 450701-0013"
                     minLength={2}
-                    maxLength={20}
+                    maxLength={40}
                     onChange={handleToolIdChange}
-                    required>
+                    >
                 </input>
                 <label htmlFor='newRegNo' className="toolscreen__item">Регистрационный номер типа СИ</label>
                 <input 
@@ -331,28 +338,28 @@ function NewToolScreen({ onClose, isOpen, setSelectedTool, isNewToolAdded, setNe
                     name='newRegNo'
                     type="text"
                     value={toolRegisterNo}
-                    placeholder="Регистрационный номер"
+                    placeholder="Регистрационный номер типа СИ"
                     minLength={2}
-                    maxLength={20}
+                    maxLength={40}
                     onChange={handleToolRegisterNoChange}
-                    required>
+                    >
                 </input>
                 <label htmlFor='newSerialNo' className="toolscreen__item">Серийный номер</label>
                 <input 
-                    className="toolscreen__input"
+                    className="toolscreen__input toolscreen__input_user"
                     id='newSerialNo'
                     name='newSerialNo'
                     type="text"
                     value={toolSerialNo}
-                    placeholder="Серийный номер"
+                    placeholder="Серийный номер от производителя"
                     minLength={2}
-                    maxLength={20}
+                    maxLength={80}
                     onChange={handleToolSerialNoChange}
-                    required>
+                    >
                 </input>
                 <label htmlFor='newParameters' className="toolscreen__item">Параметры</label>
                 <textarea 
-                    className="toolscreen__input toolscreen__input_textarea"
+                    className="toolscreen__input toolscreen__input_user toolscreen__input_textarea"
                     id='newParameters'
                     name='newParameters'
                     type="text"
@@ -360,62 +367,70 @@ function NewToolScreen({ onClose, isOpen, setSelectedTool, isNewToolAdded, setNe
                     placeholder="Например: Класс точности, Диапазон измерений, Тип присоединения, Диаметр корпуса"
                     onChange={handleToolParametersChange}
                     minLength={2}
-                    maxLength={400}>
+                    maxLength={600}>
                 </textarea>
-                <label htmlFor='newCertificateNo' className="toolscreen__item">Номер сертификата</label>
-                <input 
-                    className="toolscreen__input"
-                    id='newCertificateNo'
-                    name='newCertificateNo'
-                    type="text"
-                    value={toolCertificateNo}
-                    onChange={handleToolCertificateNoChange}
-                    placeholder="Номер сертификата"
-                    minLength={2}
-                    maxLength={40}>
-                </input>
                 <label htmlFor='newcalibration_status' className="toolscreen__item">Статус поверки/калибровки</label>
                 <select 
                     className="toolscreen__input"
                     id='newcalibration_status'
                     name='newcalibration_status'
+                    type="text"
                     value={toolCalibrationStatus}
-                    onChange={handleToolCalibarionStatusChange}
-                    required>
+                    onChange={handleToolCalibrationStatusChange}
+                    >
                         <option value="">-- Выберите статус --</option>
                         <option value="Годен">Годен</option>
                         <option value="Не годен">Не годен</option>
                 </select>
-                <label htmlFor='newCondition' className="toolscreen__item">Текущее состояние</label>
+                <label htmlFor='newCondition' className="toolscreen__item">Текущее состояние*</label>
                 <select 
                     className="toolscreen__input"
                     id='newCondition'
                     name='newCondition'
+                    type="text"
                     value={toolCondition}
                     onChange={handleToolConditionChange}
                     required>
-                        <option value="">-- Выберите статус --</option>
+                        <option value="">-- Выберите состояние --</option>
                         <option value="Требуется регистрация">Требуется регистрация</option>
-                        <option value="Используется">Используется</option>
-                        <option value="На хранении">На хранении</option>
-                        <option value="Утерян">Утерян</option>
-                        <option value="Сломан">Сломан</option>
-                        <option value="Утилизирован">Утилизирован</option>
-                        <option value="На поверке">На поверке</option>
                 </select>
             </fieldset>
 
             <fieldset className='toolscreen__block'>
-                <label htmlFor='newReceiveDate' className="toolscreen__item">Дата приёмки</label>
-                <input 
-                    id='newReceiveDate' 
-                    name='newReceiveDate' 
-                    className="toolscreen__input"
-                    type="date"
-                    value={toolReceiveDate}
-                    onChange={handleToolReceiveDateChange}
+            <label htmlFor='newType' className="toolscreen__item">Тип СИ*</label>
+                <select 
+                    id='newType' 
+                    name='newType' 
+                    className="toolscreen__input toolscreen__input_user"
+                    type="text"
+                    value={toolTypeValid.value}
+                    onChange={(e) => toolTypeValid.onChange(e)}
+                    onBlur={(e) => toolTypeValid.onBlur(e)}
                     required>
-                </input>
+                        <option value="">-- Выберите тип СИ --</option>
+                        <option value="Переносной">Переносной</option>
+                        <option value="Стационарный">Стационарный</option>
+                </select>
+                {(toolTypeValid.isDirty && toolTypeValid.isEmpty) && <span className="toolscreen__input-error">Поле не может быть пустым</span>}
+                <label htmlFor='newCategory' className="toolscreen__item">Категория*</label>
+                <select 
+                    id='newCategory' 
+                    name='newCategory' 
+                    className="toolscreen__input toolscreen__input_user"
+                    type="text"
+                    value={toolCategoryValid.value}
+                    onChange={(e) => toolCategoryValid.onChange(e)}
+                    onBlur={(e) => toolCategoryValid.onBlur(e)}
+                    required>
+                        <option value="">-- Выберите категорию --</option>
+                        <option value="Газоанализаторы">Газоанализаторы</option>
+                        <option value="Манометры">Манометры</option>
+                        <option value="Термометры">Термометры</option>
+                        <option value="Приборы">Приборы</option>
+                        <option value="Инструменты">Инструменты</option>
+                        <option value="Другое оборудование">Другое оборудование</option>
+                </select>
+                {(toolCategoryValid.isDirty && toolCategoryValid.isEmpty) && <span className="toolscreen__input-error">Поле не может быть пустым</span>}
                 <label htmlFor='newCheckDate' className="toolscreen__item">Дата поверки/калибровки</label>
                 <input 
                     id='newCheckDate' 
@@ -423,8 +438,7 @@ function NewToolScreen({ onClose, isOpen, setSelectedTool, isNewToolAdded, setNe
                     className="toolscreen__input"
                     type="date"
                     value={toolCheckDate}
-                    onChange={handleToolCheckDateChange}
-                    required>
+                    onChange={handleToolCheckDateChange}>
                 </input>
                 <label htmlFor='newUsagePeriod' className="toolscreen__item">Межповерочный интервал (МПИ)</label>
                 <input 
@@ -434,30 +448,21 @@ function NewToolScreen({ onClose, isOpen, setSelectedTool, isNewToolAdded, setNe
                     type="text"
                     value={toolUsagePeriod}
                     onChange={handleToolUsagePeriodChange}
-                    placeholder="Количество дней"
-                    required>
-                </input>
-                <label htmlFor='newReadyDate' className="toolscreen__item">Дата готовности</label>
-                <input 
-                    className="toolscreen__input"
-                    id='newReadyDate'
-                    name='newReadyDate'
-                    type="date"
-                    value={toolReadyDate}
-                    onChange={handleToolReadyDateChange}
-                    required>
-                </input>
-                <label htmlFor='newReleaseDate' className="toolscreen__item">Дата выдачи</label>
-                <input 
-                    className="toolscreen__input"
-                    id='newReleaseDate'
-                    name='newReleaseDate'
-                    type="text"
-                    value={toolReleaseDate}
-                    onChange={handleToolReleaseDateChange}
-                    placeholder="Дата выдачи"
+                    placeholder="Количество дней, например: 365"
                     minLength={2}
-                    maxLength={20}>
+                    maxLength={5}>
+                </input>
+                <label htmlFor='newCertificateNo' className="toolscreen__item">Номер сертификата</label>
+                <input 
+                    className="toolscreen__input"
+                    id='newCertificateNo'
+                    name='newCertificateNo'
+                    type="text"
+                    value={toolCertificateNo}
+                    onChange={handleToolCertificateNoChange}
+                    placeholder="Например: С-ЕВЧ/14-02-2023/223467711"
+                    minLength={2}
+                    maxLength={100}>
                 </input>
                 <label htmlFor='newNextCheckDate' className="toolscreen__item">Дата следующей поверки/калибровки</label>
                 <input 
@@ -467,35 +472,47 @@ function NewToolScreen({ onClose, isOpen, setSelectedTool, isNewToolAdded, setNe
                     type="date"
                     value={toolNextCheckDate}
                     onChange={handleToolNextCheckDateChange}
-                    required>
+                    >
                 </input>
-                <label htmlFor='newOwnerDept' className="toolscreen__item">Ответственный департамент/цех</label>
-                <select 
+                <label htmlFor='newRemainUsagePeriod' className="toolscreen__item">Остаток дней до поверки/калибровки</label>
+                <input 
+                    id='newRemainUsagePeriod' 
+                    name='newRemainUsagePeriod' 
                     className="toolscreen__input"
+                    type="number"
+                    value={toolRemainUsagePeriod}
+                    onChange={handleToolRemainUsagePeriodChange}>
+                </input>
+                <label htmlFor='newOwnerDept' className="toolscreen__item">Ответственный департамент/цех*</label>
+                <select 
+                    className="toolscreen__input toolscreen__input_user"
                     id='newOwnerDept'
                     name='newOwnerDept'
-                    value={toolOwnerDept}
-                    onChange={handleToolOwnerDeptChange}
+                    value={toolOwnerDeptValid.value}
+                    onChange={(e) => toolOwnerDeptValid.onChange(e)}
+                    onBlur={(e) => toolOwnerDeptValid.onBlur(e)}
                     required>
                         <option value="">-- Выберите из списка --</option>
                         <option value="QA">QA</option>
                         <option value="QC">QC</option>
-                        <option value="Stamping">Stamping</option>
-                        <option value="Welding">Welding</option>
-                        <option value="Paint">Paint</option>
-                        <option value="Assembly">Assembly</option>
+                        <option value="Stamping shop">Stamping shop</option>
+                        <option value="Welding shop">Welding shop</option>
+                        <option value="Paint shop">Paint shop</option>
+                        <option value="Assembly shop">Assembly shop</option>
                         <option value="PM">PM</option>
                         <option value="PE&S">PE&S</option>
                         <option value="Maintenance">Maintenance</option>
                         <option value="R&D">R&D</option>
                 </select>
-                <label htmlFor='newOwnerSection' className="toolscreen__item">Ответственный отдел</label>
+                {(toolOwnerDeptValid.isDirty && toolOwnerDeptValid.isEmpty) && <span className="toolscreen__input-error">Поле не может быть пустым</span>}
+                <label htmlFor='newOwnerSection' className="toolscreen__item">Ответственный отдел*</label>
                 <select 
-                    className="toolscreen__input"
+                    className="toolscreen__input toolscreen__input_user"
                     id='newOwnerSection'
                     name='newOwnerSection'
-                    value={toolOwnerSection}
-                    onChange={handleToolOwnerSectionChange}
+                    value={toolOwnerSectionValid.value}
+                    onChange={(e) => toolOwnerSectionValid.onChange(e)}
+                    onBlur={(e) => toolOwnerSectionValid.onBlur(e)}
                     required>
                         <option value="">-- Выберите из списка --</option>
                         <option value="QA Information">QA Information</option>
@@ -506,10 +523,10 @@ function NewToolScreen({ onClose, isOpen, setSelectedTool, isNewToolAdded, setNe
                         <option value="QC Painting">QC Painting</option>
                         <option value="QC Parts">QC Parts</option>
                         <option value="QC Management">QC Management</option>
-                        <option value="Stamping">Stamping</option>
-                        <option value="Welding">Welding</option>
-                        <option value="Paint">Paint</option>
-                        <option value="Assembly">Assembly</option>
+                        <option value="Stamping shop">Stamping shop</option>
+                        <option value="Welding shop">Welding shop</option>
+                        <option value="Paint shop">Paint shop</option>
+                        <option value="Assembly shop">Assembly shop</option>
                         <option value="PM">PM</option>
                         <option value="PE&S Fire Safety">PE&S Fire Safety</option>
                         <option value="PE&S Utility">PE&S Utility</option>
@@ -522,67 +539,85 @@ function NewToolScreen({ onClose, isOpen, setSelectedTool, isNewToolAdded, setNe
                         <option value="Maintenance Assembly">Maintenance Assembly</option>
                         <option value="R&D">R&D</option>
                 </select>
-                <label htmlFor='newOwnerName' className="toolscreen__item">ФИО ответственного сотрудника</label>
+                {(toolOwnerSectionValid.isDirty && toolOwnerSectionValid.isEmpty) && <span className="toolscreen__input-error">Поле не может быть пустым</span>}
+                <label htmlFor='newOwnerName' className="toolscreen__item">ФИО ответственного сотрудника*</label>
                 <input 
-                    className="toolscreen__input"
+                    className="toolscreen__input toolscreen__input_user"
                     id='newOwnerName'
                     name='newOwnerName'
                     type="text"
-                    value={toolOwnerName}
-                    onChange={handleToolOwnerNameChange}
-                    placeholder="Например: Пригожин Евгений"
+                    value={toolOwnerNameValid.value}
+                    onChange={(e) => toolOwnerNameValid.onChange(e)}
+                    onBlur={(e) => toolOwnerNameValid.onBlur(e)}
+                    placeholder="Например: Пушкин Александр"
                     minLength={2}
                     maxLength={40}
                     required>
                 </input>
-                <label htmlFor='newUsageLocation' className="toolscreen__item">Место использования</label>
-                <textarea 
-                    className="toolscreen__input toolscreen__input_textarea"
-                    id='newUsageLocation'
-                    name='newUsageLocation'
-                    type="text"
-                    value={toolUsageLocation}
-                    placeholder="Укажите где установлено данное оборудование"
-                    onChange={handleToolUsageLocationChange}
-                    minLength={2}
-                    maxLength={400}>
-                </textarea>
+                {(toolOwnerNameValid.isDirty && toolOwnerNameValid.isEmpty) && <span className="toolscreen__input-error">Поле не может быть пустым</span>}
+                {(toolOwnerNameValid.isDirty && toolOwnerNameValid.minLengthError) && <span className="toolscreen__input-error">Не менее 2-х символов</span>}
             </fieldset>
 
             <fieldset className='toolscreen__block toolscreen__block_checkbox'>
-            <label htmlFor='newRemainUsagePeriod' className="toolscreen__item">Остаток дней до поверки/калибровки</label>
-                <input 
-                    id='newRemainUsagePeriod' 
-                    name='newRemainUsagePeriod' 
-                    className="toolscreen__input"
-                    type="number"
-                    value={toolRemainUsagePeriod}
-                    onChange={handleToolRemainUsagePeriodChange}>
-                </input>
-                <label htmlFor='newCurrentLocation' className="toolscreen__item">Текущее местонахождение</label>
-                <input 
+                <label htmlFor='newUsageLocation' className="toolscreen__item">Место нахождения*</label>
+                <textarea 
+                    className="toolscreen__input toolscreen__input_user toolscreen__input_textarea"
+                    id='newUsageLocation'
+                    name='newUsageLocation'
+                    type="text"
+                    value={toolUsageLocationValid.value}
+                    placeholder="Укажите цех/департамент/линию, где находится данное средство измерения"
+                    onChange={(e) => toolUsageLocationValid.onChange(e)}
+                    onBlur={(e) => toolUsageLocationValid.onBlur(e)}
+                    minLength={2}
+                    maxLength={100}
+                    required>
+                </textarea>
+                {(toolUsageLocationValid.isDirty && toolUsageLocationValid.isEmpty) && <span className="toolscreen__input-error">Поле не может быть пустым</span>}
+                {(toolUsageLocationValid.isDirty && toolUsageLocationValid.minLengthError) && <span className="toolscreen__input-error">Не менее 2-х символов</span>}
+                <label htmlFor='newCurrentLocation' className="toolscreen__item">Место расположения*</label>
+                <textarea 
                     id='newCurrentLocation' 
                     name='newCurrentLocation' 
-                    className="toolscreen__input"
+                    className="toolscreen__input toolscreen__input_user toolscreen__input_textarea"
                     type="text"
-                    value={toolCurrentLocation}
-                    onChange={handleToolCurrentLocationChange}
-                    placeholder="Где сейчас оборудование? На поверке? В запасе?"
+                    value={toolCurrentLocationValid.value}
+                    onChange={(e) => toolCurrentLocationValid.onChange(e)}
+                    onBlur={(e) => toolCurrentLocationValid.onBlur(e)}
+                    placeholder="Укажите участок/станцию/помещение, где находится данное средство измерения"
                     minLength={2}
-                    maxLength={40}>
-                </input>
+                    maxLength={100}
+                    required>
+                </textarea>
+                {(toolCurrentLocationValid.isDirty && toolCurrentLocationValid.isEmpty) && <span className="toolscreen__input-error">Поле не может быть пустым</span>}
+                {(toolCurrentLocationValid.isDirty && toolCurrentLocationValid.minLengthError) && <span className="toolscreen__input-error">Не менее 2-х символов</span>}
+                <label htmlFor='newInstallLocation' className="toolscreen__item">Место установки*</label>
+                <textarea
+                    id='newInstallLocation' 
+                    name='newInstallLocation' 
+                    className="toolscreen__input toolscreen__input_user toolscreen__input_textarea"
+                    type="text"
+                    value={toolInstalledLocationValid.value}
+                    onChange={(e) => toolInstalledLocationValid.onChange(e)}
+                    onBlur={(e) => toolInstalledLocationValid.onBlur(e)}
+                    placeholder="Укажите оборудование, на котором установлено данное средство измерения"
+                    minLength={2}
+                    maxLength={100}
+                    required>
+                </textarea>
+                {(toolInstalledLocationValid.isDirty && toolInstalledLocationValid.isEmpty) && <span className="toolscreen__input-error">Поле не может быть пустым</span>}
                 <label htmlFor='newManufacturer' className="toolscreen__item">Производитель</label>
                 <input 
-                    className="toolscreen__input"
+                    className="toolscreen__input toolscreen__input_user"
                     id='newManufacturer'
                     name='newManufacturer'
                     type="text"
                     value={toolManufacturer}
-                    placeholder="Название компании-производителя"
+                    placeholder="Например: ЗАО Эталон"
                     minLength={2}
-                    maxLength={40}
+                    maxLength={100}
                     onChange={handleToolManufacturerChange}
-                    required>
+                    >
                 </input>
                 <label htmlFor='newCheckCompany' className="toolscreen__item">Поверитель</label>
                 <input 
@@ -592,23 +627,13 @@ function NewToolScreen({ onClose, isOpen, setSelectedTool, isNewToolAdded, setNe
                     type="text"
                     value={toolCheckCompany}
                     onChange={handleToolCheckCompanyChange}
-                    placeholder="Название компании-поверителя"
+                    placeholder="Например: РМЦ Калиброн"
                     minLength={2}
-                    maxLength={40}>
-                </input>
-                <label htmlFor='newCheckCost' className="toolscreen__item">Стоимость поверки/калибровки</label>
-                <input 
-                    className="toolscreen__input"
-                    id='newCheckCost'
-                    name='newCheckCost'
-                    type="text"
-                    value={toolCheckCost}
-                    onChange={handleToolCheckCostChange}
-                    placeholder="Стоимость в рублях">
+                    maxLength={80}>
                 </input>
                 <label htmlFor='newComment' className="toolscreen__item toolscreen__item_comment">Комментарий</label>
                 <textarea 
-                    className="toolscreen__input toolscreen__input_textarea"
+                    className="toolscreen__input toolscreen__input_user toolscreen__input_textarea"
                     id='newComment'
                     name='newComment'
                     form='toolForm'
@@ -617,13 +642,14 @@ function NewToolScreen({ onClose, isOpen, setSelectedTool, isNewToolAdded, setNe
                     onChange={handleCommentChange}
                     placeholder="Добавьте ваш комментарий"
                     minLength={2}
-                    maxLength={400}>
+                    maxLength={600}>
                 </textarea>
+                <p className='toolscreen__comment'>* обязательное поле</p>
                 {isNewToolAdded && <span className='toolscreen__infotooltip'>Новое СИ успешно добавлено</span>}
             </fieldset>
             <button type="button" className="toolscreen__close" onClick={onClose} />
             <button type="submit" className="toolscreen__button">Сохранить</button>
-            <button type="button" className="toolscreen__button toolscreen__button_clear" onClick={handleFormClear}>Очистить форму</button>
+            {/* <button type="button" className="toolscreen__button toolscreen__button_clear" onClick={handleFormClear}>Очистить форму</button> */}
          </form>
       </main >
    )

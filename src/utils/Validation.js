@@ -6,6 +6,10 @@ export const useInput = (initialValue, validators) => {
    const [isDirty, setDirty] = React.useState(false);
    const valid = useValidation(value, validators);
 
+   React.useEffect(() => {
+      setValue(initialValue);
+   }, [initialValue]);
+   
    const onChange = (event) => {
       setValue(event.target.value);
    }
@@ -26,6 +30,7 @@ export const useInput = (initialValue, validators) => {
 export const useValidation = (value, validators) => {
    const [isEmpty, setEmpty] = React.useState(true);
    const [minLengthError, setMinLengthError] = React.useState(false);
+   const [maxLengthError, setMaxLengthError] = React.useState(false);
    const [emailError, setEmailError] = React.useState(false);
    const [userNameError, setUserNameError] = React.useState(false);
    const [inputValid, setInputValid] = React.useState(false);
@@ -35,6 +40,9 @@ export const useValidation = (value, validators) => {
          switch (validation) {
             case 'minLength':
                value?.length < validators[validation] ? setMinLengthError(true) : setMinLengthError(false);
+               break;
+            case 'maxLength':
+               value?.length > validators[validation] ? setMaxLengthError(true) : setMaxLengthError(false);
                break;
             case 'isEmpty':
                value ? setEmpty(false) : setEmpty(true);
@@ -56,16 +64,17 @@ export const useValidation = (value, validators) => {
    }, [value]);
 
    React.useEffect(() => {
-      if (isEmpty || minLengthError || emailError || userNameError) {
+      if (isEmpty || minLengthError || maxLengthError || emailError || userNameError) {
          setInputValid(false);
       } else {
          setInputValid(true);
       }
-   }, [isEmpty, minLengthError, emailError, userNameError])
+   }, [isEmpty, minLengthError, maxLengthError, emailError, userNameError])
 
    return {
       isEmpty,
       minLengthError,
+      maxLengthError,
       emailError,
       userNameError,
       inputValid

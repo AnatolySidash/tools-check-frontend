@@ -1,4 +1,5 @@
 .toolscreen__item {
+    margin: 10px 0 0;
     padding: 0 0 5px 5px;
     font-size: 14px;
     display: flex;

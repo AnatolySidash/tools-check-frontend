@@ -46,6 +46,7 @@
 @import url(./components/ToolsCardList/toolscardlist__title.css);
 @import url(./components/ToolsCardList/toolscardlist__button.css);
 @import url(./components/ToolsCardList/toolscardlist__more-button.css);
+@import url(./components/ToolsCardList/toolscardlist__block.css);
 
 /* ------ToolsCard------ */
 
@@ -75,15 +76,18 @@
 @import url(./components/ToolScreen/toolscreen__button.css);
 @import url(./components/ToolScreen/toolscreen__button_delete.css);
 @import url(./components/ToolScreen/toolscreen__button_copy.css);
+@import url(./components/ToolScreen/toolscreen__button_save.css);
 @import url(./components/ToolScreen/toolscreen__input_textarea.css);
 @import url(./components/ToolScreen/toolscreen_opened.css);
 @import url(./components/ToolScreen/toolscreen__close.css);
 @import url(./components/ToolScreen/toolscreen__infotooltip.css);
 @import url(./components/ToolScreen/toolscreen__comment.css);
+@import url(./components/ToolScreen/toolscreen__input-error.css);
 
 /* ------NewToolScreen------ */
 
 @import url(./components/NewToolScreen/toolscreen__button_clear.css);
+@import url(./components/NewToolScreen/toolscreen__input_user.css);
 
 /* ------Register------ */
 
@@ -125,6 +129,7 @@
 @import url(./components/SearchForm/searchform__button.css);
 @import url(./components/SearchForm/search__title.css);
 @import url(./components/SearchForm/searchform__input-error.css);
+@import url(./components/SearchForm/searchform__clear-button.css);
 
 /* ------Status------ */
 
