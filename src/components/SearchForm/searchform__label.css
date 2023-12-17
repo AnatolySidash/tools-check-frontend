@@ -48,3 +48,7 @@
 .searchform__checkbox:checked+.searchform__label::after {
    opacity: 1;
 }
+
+#light .searchform__label::before {
+   background: url(../../images/04_searchform/checkbox_off_dark.svg) center no-repeat;
+}

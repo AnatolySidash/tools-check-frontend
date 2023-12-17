@@ -19,3 +19,11 @@
 .department__title:hover {
     color: #ccc;
 }
+
+#light .department__title:hover {
+    color: #527c7c
+}
+
+#light .department__title::after {
+    background-color: #2F4F4F
+}

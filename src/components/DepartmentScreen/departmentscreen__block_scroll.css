@@ -1,0 +1,4 @@
+.departmentscreen__block_scroll {
+    max-height: 480px;
+    overflow-y: auto;
+}

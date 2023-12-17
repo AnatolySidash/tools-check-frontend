@@ -14,3 +14,7 @@
 .toolscard__button:hover {
     opacity: 0.8;
 }
+
+#light .toolscard__button {
+    background-color: #00BFFF;
+ }

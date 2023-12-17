@@ -54,7 +54,7 @@ function ToolsCard({ tool, onToolClick }) {
                 </li>
                 <li className={toolConditionClassName}>
                     <h3 className='toolscard__subtitle toolscard__subtitle_black'>Статус:</h3>
-                    <p className='toolscard__data toolscard__data_black'>{tool.toolCalibrationStatus}</p>
+                    <p className='toolscard__data'>{tool.toolCalibrationStatus}</p>
                 </li>
             </ul>
         </div>

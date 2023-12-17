@@ -6,3 +6,7 @@
     color: #ccc;
     display: inline-block;
 }
+
+#light .toolscard__subtitle {
+    color: #2F4F4F
+}

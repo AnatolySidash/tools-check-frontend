@@ -6,3 +6,12 @@
 .toolscreen__button_save:disabled {
     background-color: #858b85;
 }
+
+#light .toolscreen__button_save {
+    background-color: #00FF66;
+    color: #2F4F4F;
+}
+
+#light .toolscreen__button_save:disabled {
+    background-color: #C0C0C0;
+}

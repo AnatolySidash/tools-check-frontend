@@ -5,3 +5,8 @@
     color: #000;
     font-weight: bold;
 }
+
+#light .toolscard__item_red {
+    color:#2F4F4F;
+    background-color: #FF6347;
+ }

@@ -2,3 +2,11 @@
     padding: 0;
     margin: 0 0 30px 0;
 }
+
+#light .status__title {
+    color: #2F4F4F
+}
+
+#dark .status__title {
+    color: #fff
+}

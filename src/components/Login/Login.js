@@ -1,7 +1,9 @@
 import React from 'react';
 import { Link, NavLink, useNavigate } from 'react-router-dom';
 import logo from '../../images/01_header/logo.svg';
+import logoDark from '../../images/01_header/logo_dark.svg';
 import { useInput } from '../../utils/Validation.js';
+import { ThemeContext } from '../../contexts/ThemeContext';
 import * as auth from '../../utils/Auth.js';
 
 function Login({ onLogin }) {
@@ -9,6 +11,7 @@ function Login({ onLogin }) {
    const navigate = useNavigate();
    const [isError, setError] = React.useState(false);
    const [errorMessage, setErrorMessage] = React.useState({});
+   const { theme } = React.useContext(ThemeContext);
 
    function handleErrorMessage() {
       setError(true);
@@ -35,7 +38,7 @@ function Login({ onLogin }) {
    return (
       <main className="login">
          <NavLink to="/" className="navigation__logo">
-            <img src={logo} alt="Логотип сайта в виде зелёного кольца" className="logo" />
+            <img src={ theme === 'dark' ? logo : logoDark } alt="Логотип сайта в виде зелёного кольца" className="logo" />
          </NavLink>
          <h1 className="login__title">Рады видеть!</h1>
          <form className="form" onSubmit={handleSubmit}>

@@ -17,3 +17,7 @@
 .toolscreen__close:hover {
     transform: rotateZ(120deg);
   }
+
+#light .toolscreen__close {
+    background: url(../../images/03_toolscreen/closeDark.svg) center no-repeat;
+}

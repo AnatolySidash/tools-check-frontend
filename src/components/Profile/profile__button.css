@@ -22,15 +22,6 @@
     background-color: #2f2f2f;
 }
 
-@media screen and (max-width: 768px) {
-    .profile__button {
-        margin-top: 177px;
-    }
-}
-
-@media screen and (max-width: 320px) {
-    .profile__button {
-        margin-top: 346px;
-        font-size: 12px;
-    }
-}
+#light .profile__button {
+    color:#2F4F4F;
+ }

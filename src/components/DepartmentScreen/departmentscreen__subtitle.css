@@ -4,3 +4,7 @@
     font-size: 24px;
     border-bottom: 1px solid #fff;
 }
+
+#light .departmentscreen__subtitle {
+    border-bottom: 1px solid #F0FFF0;
+ }

@@ -4,54 +4,44 @@ import { useInput } from '../../utils/Validation.js';
 
 function NewToolScreen({ onClose, isOpen, setSelectedTool, isNewToolAdded, setNewToolAdded }) {
 
-    const [toolNameRU, setNameRU] = React.useState('');
-    const [toolNameEN, setNameEN] = React.useState('');
     const [toolModel, setToolModel] = React.useState('');
     const [toolId, setToolId] = React.useState('');
-    const [toolType, setToolType] = React.useState('');
     const [toolManufacturer, setToolManufacturer] = React.useState('');
     const [toolSerialNo, setToolSerialNo] = React.useState('');
     const [toolRegisterNo, setToolRegisterNo] = React.useState('');
     const [toolParameters, setToolParameters] = React.useState('');
     const [toolCheckDate, setToolCheckDate] = React.useState('');
-    const [toolCategory, setToolCategory] = React.useState('');
     const [toolNextCheckDate, setToolNextCheckDate] = React.useState('');
     const [toolUsagePeriod, setToolUsagePeriod] = React.useState('');
     const [toolRemainUsagePeriod, setToolRemainUsagePeriod] = React.useState('');
     const [toolCertificateNo, setToolCertificateNo] = React.useState('');
-    const [toolCondition, setToolCondition] = React.useState('');
     const [toolCalibrationStatus, setToolCalibrationStatus] = React.useState('');
-    const [toolCurrentLocation, setToolCurrentLocation] = React.useState('');
-    const [toolUsageLocation, setToolUsageLocation] = React.useState('');
-    const [toolInstalledLocation, setToolInstalledLocation] = React.useState('');
-    const [toolOwnerDept, setToolOwnerDept] = React.useState('');
-    const [toolOwnerSection, setToolOwnerSection] = React.useState('');
-    const [toolOwnerName, setToolOwnerName] = React.useState('');
     const [toolCheckCompany, setToolCheckCompany] = React.useState('');
     const [comment, setComment] = React.useState('');
 
     // Валидация
 
-    const toolNameRUValid = useInput(toolNameRU, { isEmpty: true, minLength: 2 });
-    const toolNameENValid = useInput(toolNameEN, { isEmpty: true, minLength: 2 });
-    const toolTypeValid = useInput(toolType, { isEmpty: true });
-    const toolCategoryValid = useInput(toolCategory, { isEmpty: true });
-    const toolOwnerDeptValid = useInput(toolOwnerDept, { isEmpty: true });
-    const toolOwnerSectionValid = useInput(toolOwnerSection, { isEmpty: true });
-    const toolOwnerNameValid = useInput(toolOwnerName, { isEmpty: true, minLength: 2 });
-    const toolUsageLocationValid = useInput(toolUsageLocation, { isEmpty: true, minLength: 2 });
-    const toolCurrentLocationValid = useInput(toolCurrentLocation, { isEmpty: true, minLength: 2 });
-    const toolInstalledLocationValid = useInput(toolInstalledLocation, { isEmpty: true, minLength: 2 });
+    const toolNameRUValid = useInput('', { isEmpty: true, minLength: 2 });
+    const toolNameENValid = useInput('', { isEmpty: true, minLength: 2 });
+    const toolTypeValid = useInput('', { isEmpty: true });
+    const toolCategoryValid = useInput('', { isEmpty: true });
+    const toolOwnerDeptValid = useInput('', { isEmpty: true });
+    const toolOwnerSectionValid = useInput('', { isEmpty: true });
+    const toolOwnerNameValid = useInput('', { isEmpty: true, minLength: 2 });
+    const toolUsageLocationValid = useInput('', { isEmpty: true, minLength: 2 });
+    const toolCurrentLocationValid = useInput('', { isEmpty: true, minLength: 2 });
+    const toolInstalledLocationValid = useInput('', { isEmpty: true, minLength: 2 });
+    const toolConditionValid = useInput('', { isEmpty: true, minLength: 2 });
 
     function handleNextCheckDate() {
-        const newDate = new Date(toolCheckDate);
-        newDate.setDate(newDate.getDate() + Number(toolUsagePeriod));
+        const newDate = new Date(toolCheckDate !== '' ? toolCheckDate : new Date());
+        newDate.setDate(newDate.getDate() + Number(toolUsagePeriod !== '' ? toolUsagePeriod : '365'));
         return newDate.toISOString().slice(0, 10);
     }
 
     function checkDayDifference() {
         const todayDate = new Date();
-        const nextCheckDate = new Date(toolNextCheckDate);
+        const nextCheckDate = new Date(handleNextCheckDate());
         return Math.round((nextCheckDate - todayDate) / (60 * 60 * 24 * 1000));
     }
 
@@ -66,17 +56,17 @@ function NewToolScreen({ onClose, isOpen, setSelectedTool, isNewToolAdded, setNe
 
     function handleToolUsagePeriod() {
         if(toolUsagePeriod) {
-            setToolUsagePeriod(toolUsagePeriod);
+            return toolUsagePeriod;
         } else {
-            setToolUsagePeriod(365);
+            return '365';
         }
     }
 
     function handleToolCheckDate() {
         if(toolCheckDate) {
-            setToolCheckDate(toolCheckDate);
+            return toolCheckDate.toString();
         } else {
-            setToolCheckDate(new Date().toISOString().slice(0, 10));
+            return new Date().toString();
         }
     }
 
@@ -124,10 +114,6 @@ function NewToolScreen({ onClose, isOpen, setSelectedTool, isNewToolAdded, setNe
         setToolCertificateNo(event.target.value);
     }
 
-    const handleToolConditionChange = (event) => {
-        setToolCondition(event.target.value);
-    }
-
     const handleToolCalibrationStatusChange = (event) => {
         setToolCalibrationStatus(event.target.value);
     }
@@ -157,9 +143,9 @@ function NewToolScreen({ onClose, isOpen, setSelectedTool, isNewToolAdded, setNe
            toolCategory: toolCategoryValid.value,
            toolNextCheckDate: handleNextCheckDate(),
            toolUsagePeriod: handleToolUsagePeriod(),
-           toolRemainUsagePeriod: toolRemainUsagePeriod,
+           toolRemainUsagePeriod: checkDayDifference(),
            toolCertificateNo: toolCertificateNo,
-           toolCondition: toolCondition,
+           toolCondition: toolConditionValid.value,
            toolCalibrationStatus: changeToolCalibrationStatus(),
            toolCurrentLocation: toolCurrentLocationValid.value,
            toolUsageLocation: toolUsageLocationValid.value,
@@ -240,34 +226,6 @@ function NewToolScreen({ onClose, isOpen, setSelectedTool, isNewToolAdded, setNe
             // })
          });
       }
-
-    //   function handleFormClear() {
-    //     setNameRU('');
-    //     setNameEN('');
-    //     setToolModel('')
-    //     setToolId('');
-    //     setToolType('');
-    //     setToolManufacturer('');
-    //     setToolSerialNo('');
-    //     setToolRegisterNo('');
-    //     setToolParameters('');
-    //     setToolCheckDate('');
-    //     setToolCategory('');
-    //     setToolNextCheckDate('');
-    //     setToolUsagePeriod('');
-    //     setToolRemainUsagePeriod('');
-    //     setToolCertificateNo('');
-    //     setToolCondition('');
-    //     setToolCalibrationStatus('');
-    //     setToolCurrentLocation();
-    //     setToolUsageLocation('');
-    //     setToolInstalledLocation('');
-    //     setToolOwnerDept('');
-    //     setToolOwnerSection('');
-    //     setToolOwnerName('');
-    //     setToolCheckCompany('');
-    //     setComment('');
-    //   }
 
    return (
     <main className={`toolscreen ${isOpen ? 'toolscreen_opened' : ''}`}>
@@ -376,24 +334,25 @@ function NewToolScreen({ onClose, isOpen, setSelectedTool, isNewToolAdded, setNe
                     name='newcalibration_status'
                     type="text"
                     value={toolCalibrationStatus}
-                    onChange={handleToolCalibrationStatusChange}
-                    >
+                    onChange={handleToolCalibrationStatusChange}>
                         <option value="">-- Выберите статус --</option>
                         <option value="Годен">Годен</option>
                         <option value="Не годен">Не годен</option>
                 </select>
                 <label htmlFor='newCondition' className="toolscreen__item">Текущее состояние*</label>
                 <select 
-                    className="toolscreen__input"
+                    className="toolscreen__input toolscreen__input_user"
                     id='newCondition'
                     name='newCondition'
                     type="text"
-                    value={toolCondition}
-                    onChange={handleToolConditionChange}
+                    value={toolConditionValid.value}
+                    onChange={(e) => toolConditionValid.onChange(e)}
+                    onBlur={(e) => toolConditionValid.onBlur(e)}
                     required>
                         <option value="">-- Выберите состояние --</option>
                         <option value="Требуется регистрация">Требуется регистрация</option>
                 </select>
+                {(toolConditionValid.isDirty && toolConditionValid.isEmpty) && <span className="toolscreen__input-error">Поле не может быть пустым</span>}
             </fieldset>
 
             <fieldset className='toolscreen__block'>
@@ -648,8 +607,20 @@ function NewToolScreen({ onClose, isOpen, setSelectedTool, isNewToolAdded, setNe
                 {isNewToolAdded && <span className='toolscreen__infotooltip'>Новое СИ успешно добавлено</span>}
             </fieldset>
             <button type="button" className="toolscreen__close" onClick={onClose} />
-            <button type="submit" className="toolscreen__button">Сохранить</button>
-            {/* <button type="button" className="toolscreen__button toolscreen__button_clear" onClick={handleFormClear}>Очистить форму</button> */}
+            <button  disabled={
+                !toolNameRUValid.inputValid ||
+                !toolNameENValid.inputValid ||
+                !toolTypeValid.inputValid ||
+                !toolCategoryValid.inputValid ||
+                !toolOwnerDeptValid.inputValid ||
+                !toolOwnerSectionValid.inputValid ||
+                !toolOwnerNameValid.inputValid ||
+                !toolUsageLocationValid.inputValid ||
+                !toolCurrentLocationValid.inputValid ||
+                !toolInstalledLocationValid.inputValid ||
+                !toolConditionValid.inputValid
+            }
+            type="submit" className="toolscreen__button toolscreen__button_save">Сохранить</button>
          </form>
       </main >
    )

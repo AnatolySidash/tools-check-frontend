@@ -1,4 +1,5 @@
 import React from 'react';
+import PersonCard from '../PersonCard/PersonCard.js';
 
 function DepartmentScreen({ tools, onClose, isOpen, selectedDepartment }) {
 
@@ -9,6 +10,12 @@ function DepartmentScreen({ tools, onClose, isOpen, selectedDepartment }) {
     const totalTools = tools.filter((tool) => {
         return (tool.toolOwnerDept.toLowerCase().includes(currentDepartment?.shortNameEN.toLowerCase()));
     })
+
+    const deptPersonList = totalTools.map((item) => {
+        return item.toolOwnerName;
+    })
+
+    const personList = Array.from(new Set(deptPersonList));
 
     const okTools = tools.filter((tool) => {
         return (tool.toolCalibrationStatus.toLowerCase().includes('годен'.toLowerCase()) && 
@@ -166,11 +173,11 @@ function DepartmentScreen({ tools, onClose, isOpen, selectedDepartment }) {
                             </li>
                             <ul className='departmentscreen__sublist'>
                                 <li className='departmentscreen__item'>
-                                    <h3 className='departmentscreen__name'>Не требуется поверка/калибровка в течение 60 дней:</h3>
+                                    <h3 className='departmentscreen__name departmentscreen__name_small'>Не требуется поверка/калибровка в течение 60 дней:</h3>
                                     <p className='departmentscreen__result'>{notNeedCheckUsingTools.length}</p>
                                 </li>
                                 <li className='departmentscreen__item'>
-                                    <h3 className='departmentscreen__name'>Требуется поверка/калибровка в течение 60 дней:</h3>
+                                    <h3 className='departmentscreen__name departmentscreen__name_small'>Требуется поверка/калибровка в течение 60 дней:</h3>
                                     <p className='departmentscreen__result'>{needCheckUsingTools.length}</p>
                                 </li>
                             </ul>
@@ -180,23 +187,23 @@ function DepartmentScreen({ tools, onClose, isOpen, selectedDepartment }) {
                             </li>
                             <ul className='departmentscreen__sublist'>
                                 <li className='departmentscreen__item'>
-                                    <h3 className='departmentscreen__name'>Требуется регистрация:</h3>
+                                    <h3 className='departmentscreen__name departmentscreen__name_small'>Требуется регистрация:</h3>
                                     <p className='departmentscreen__result'>{needRegisterTools.length}</p>
                                 </li>
                                 <li className='departmentscreen__item'>
-                                    <h3 className='departmentscreen__name'>Выданы:</h3>
+                                    <h3 className='departmentscreen__name departmentscreen__name_small'>Выданы:</h3>
                                     <p className='departmentscreen__result'>{okReleasedTools.length}</p>
                                 </li>
                                 <li className='departmentscreen__item'>
-                                    <h3 className='departmentscreen__name'>На хранении:</h3>
+                                    <h3 className='departmentscreen__name departmentscreen__name_small'>На хранении:</h3>
                                     <p className='departmentscreen__result'>{okSpareTools.length}</p>
                                 </li>
                                 <li className='departmentscreen__item'>
-                                    <h3 className='departmentscreen__name'>Сломаны:</h3>
+                                    <h3 className='departmentscreen__name departmentscreen__name_small'>Сломаны:</h3>
                                     <p className='departmentscreen__result'>{okBrokenTools.length}</p>
                                 </li>
                                 <li className='departmentscreen__item'>
-                                    <h3 className='departmentscreen__name'>Утеряны:</h3>
+                                    <h3 className='departmentscreen__name departmentscreen__name_small'>Утеряны:</h3>
                                     <p className='departmentscreen__result'>{okLostTools.length}</p>
                                 </li>
                             </ul>
@@ -219,30 +226,42 @@ function DepartmentScreen({ tools, onClose, isOpen, selectedDepartment }) {
                             </li>
                             <ul className='departmentscreen__sublist'>
                                 <li className='departmentscreen__item'>
-                                    <h3 className='departmentscreen__name'>Выданы:</h3>
+                                    <h3 className='departmentscreen__name departmentscreen__name_small'>Выданы:</h3>
                                     <p className='departmentscreen__result'>{notOkReleasedTools.length}</p>
                                 </li>
                                 <li className='departmentscreen__item'>
-                                    <h3 className='departmentscreen__name'>На хранении:</h3>
+                                    <h3 className='departmentscreen__name departmentscreen__name_small'>На хранении:</h3>
                                     <p className='departmentscreen__result'>{notOkSpareTools.length}</p>
                                 </li>
                                 <li className='departmentscreen__item'>
-                                    <h3 className='departmentscreen__name'>На поверке/калибровке:</h3>
+                                    <h3 className='departmentscreen__name departmentscreen__name_small'>На поверке/калибровке:</h3>
                                     <p className='departmentscreen__result'>{checkingTools.length}</p>
                                 </li>
                                 <li className='departmentscreen__item'>
-                                    <h3 className='departmentscreen__name'>Сломаны:</h3>
+                                    <h3 className='departmentscreen__name departmentscreen__name_small'>Сломаны:</h3>
                                     <p className='departmentscreen__result'>{notOkBrokenTools.length}</p>
                                 </li>
                                 <li className='departmentscreen__item'>
-                                    <h3 className='departmentscreen__name'>Утеряны:</h3>
+                                    <h3 className='departmentscreen__name departmentscreen__name_small'>Утеряны:</h3>
                                     <p className='departmentscreen__result'>{notOkLostTools.length}</p>
                                 </li>
                                 <li className='departmentscreen__item'>
-                                    <h3 className='departmentscreen__name'>Утилизированы:</h3>
+                                    <h3 className='departmentscreen__name departmentscreen__name_small'>Утилизированы:</h3>
                                     <p className='departmentscreen__result'>{scrapedTools.length}</p>
                                 </li>
                             </ul>
+                        </ul>
+                    </li>
+                    <li className="departmentscreen__block departmentscreen__block_scroll">
+                        <h3 className='departmentscreen__subtitle'>Статус по сотрудникам</h3>
+                        <ul className='departmentscreen__list'>
+                           {personList.map((person, index) => (
+                            <PersonCard 
+                                key={index}
+                                person={person}
+                                totalTools={totalTools}
+                            />
+                           ))}
                         </ul>
                     </li>
                 </ul>

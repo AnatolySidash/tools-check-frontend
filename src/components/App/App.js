@@ -9,6 +9,7 @@ import Register from './../Register/Register.js';
 import Login from './../Login/Login.js';
 import Profile from './../Profile/Profile.js';
 import { CurrentUserContext } from '../../contexts/CurrentUserContext.js';
+import { ThemeContext } from '../../contexts/ThemeContext.js';
 import mainApi from '../../utils/MainApi.js';
 import { ProtectedRoute } from '../ProtectedRoute/ProtectedRoute.js';
 import * as auth from '../../utils/Auth.js';
@@ -33,8 +34,16 @@ function App() {
     const departments = DEPARTMENTS;
     const localDB = database;
     const [submitButtonActive, setSubmitDataActive] = React.useState(false);
+    const [toolDeleteConfirm, setToolDeleteConfirm] = React.useState(false);
+    const [theme, setTheme] = React.useState('dark');
 
     const navigate = useNavigate();
+
+    const deptPersonList = tools.map((item) => {
+        return item.toolOwnerName;
+    })
+
+    const personList = Array.from(new Set(deptPersonList));
 
     function handleLogin() {
         setLoggedIn(true);
@@ -62,6 +71,7 @@ function App() {
         setNewToolAdded(false);
         setToolInfoDeleted(false);
         setSubmitDataActive(false);
+        setToolDeleteConfirm(false);
     }
 
     React.useEffect(() => {
@@ -148,95 +158,103 @@ function App() {
           });
     }
 
+    const toggleTheme = () => {
+        setTheme((currentTheme) => (currentTheme === 'dark' ? 'light' : 'dark'));
+    }
+
     return (
         <CurrentUserContext.Provider value={currentUser}>
-            <div className='root'>
-                <div className='page'>
+            <ThemeContext.Provider value={{ theme, toggleTheme }}>
+                <div className='root' id={theme}>
+                    <div className='page'>
 
-                    <Routes>
-                        <Route path="/" element={
-                            <Main 
+                        <Routes>
+                            <Route path="/" element={
+                                <Main 
                                 isLoggedIn={isLoggedIn}
-                            />
-                        } />
+                                />
+                            } />
 
-                        <Route path="/tools" element={
-                            <ProtectedRoute element={
-                                <Tools 
-                                    isLoggedIn={isLoggedIn}
-                                    tools={tools}
-                                    setTools={setTools}
-                                    onToolClick={handleToolClick}
-                                    onNewToolAdd={handleNewToolClick}
-                                    localDB={localDB}
-                                />}
-                            isLoggedIn={isLoggedIn} />
-                        } />
+                            <Route path="/tools" element={
+                                <ProtectedRoute element={
+                                    <Tools 
+                                        isLoggedIn={isLoggedIn}
+                                        tools={tools}
+                                        setTools={setTools}
+                                        onToolClick={handleToolClick}
+                                        onNewToolAdd={handleNewToolClick}
+                                        localDB={localDB}
+                                        />}
+                                        isLoggedIn={isLoggedIn} />
+                            } />
 
-                        <Route path="/status" element={
-                            <Status
+                            <Route path="/status" element={
+                                <Status
                                 tools={tools}
                                 isLoggedIn={isLoggedIn}
                                 departments={departments}
                                 onDepartmentClick={handleDepartmentClick}
-                            />
-                        } />
+                                />
+                            } />
 
-                        <Route path="/signup" element={
-                            <Register 
+                            <Route path="/signup" element={
+                                <Register 
                                 onLogin={handleLogin}
-                            />
-                        } />
+                                />
+                            } />
 
-                        <Route path="/signin" element={
-                            <Login 
+                            <Route path="/signin" element={
+                                <Login 
                                 onLogin={handleLogin}
-                            />
-                        } />
+                                />
+                            } />
 
-                        <Route path="/profile" element={
-                            <ProtectedRoute element={
-                                <Profile 
+                            <Route path="/profile" element={
+                                <ProtectedRoute element={
+                                    <Profile 
                                     isLoggedIn={isLoggedIn}
-                                    onLogout={logout}
-                                    setCurrentUser={setCurrentUser}
-                                />} 
-                                isLoggedIn={isLoggedIn} />
-                        } />
+                                        onLogout={logout}
+                                        setCurrentUser={setCurrentUser}
+                                    />} 
+                                    isLoggedIn={isLoggedIn} />
+                            } />
 
-                    </Routes>
+                        </Routes>
 
-                    <ToolScreen
-                        tool={selectedTool}
-                        onClose={closeAllPopups}
-                        isOpen={isToolScreenOpen}
-                        setTools={setTools}
-                        isToolInfoUpdated={isToolInfoUpdated}
-                        setToolInfoUpdated={setToolInfoUpdated}
-                        isToolInfoDeleted={isToolInfoDeleted}
-                        setToolInfoDeleted={setToolInfoDeleted}
-                        submitButtonActive={submitButtonActive}
-                        setSubmitDataActive={setSubmitDataActive}
-                    />
+                        <ToolScreen
+                            tool={selectedTool}
+                            onClose={closeAllPopups}
+                            isOpen={isToolScreenOpen}
+                            setTools={setTools}
+                            isToolInfoUpdated={isToolInfoUpdated}
+                            setToolInfoUpdated={setToolInfoUpdated}
+                            isToolInfoDeleted={isToolInfoDeleted}
+                            setToolInfoDeleted={setToolInfoDeleted}
+                            submitButtonActive={submitButtonActive}
+                            setSubmitDataActive={setSubmitDataActive}
+                            toolDeleteConfirm={toolDeleteConfirm}
+                            setToolDeleteConfirm={setToolDeleteConfirm}
+                            />
 
-                    <DepartmentScreen
-                        selectedDepartment={selectedDepartment}
-                        isOpen={isDepartmentScreenOpen}
-                        onClose={closeAllPopups}
-                        tools={tools}
-                    />
+                        <DepartmentScreen
+                            selectedDepartment={selectedDepartment}
+                            isOpen={isDepartmentScreenOpen}
+                            onClose={closeAllPopups}
+                            tools={tools}
+                            personList={personList}
+                            />
 
-                    <NewToolScreen
-                        tool={selectedTool}
-                        onClose={closeAllPopups}
-                        isOpen={isNewToolScreenOpen}
-                        setSelectedTool={setSelectedTool}
-                        isNewToolAdded={isNewToolAdded}
-                        setNewToolAdded={setNewToolAdded}
-                    />
-
+                        <NewToolScreen
+                            tool={selectedTool}
+                            onClose={closeAllPopups}
+                            isOpen={isNewToolScreenOpen}
+                            setSelectedTool={setSelectedTool}
+                            isNewToolAdded={isNewToolAdded}
+                            setNewToolAdded={setNewToolAdded}
+                            />
+                    </div>
                 </div>
-            </div>
+            </ThemeContext.Provider>
         </CurrentUserContext.Provider>
     )
 }

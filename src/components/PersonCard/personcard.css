@@ -1,0 +1,9 @@
+.personcard {
+    margin: 10px 0;
+    padding: 0 0 5px 0;
+    border-bottom: 1px solid #fff;
+}
+
+#light .personcard {
+    border-bottom: 1px solid #F0FFF0;
+}

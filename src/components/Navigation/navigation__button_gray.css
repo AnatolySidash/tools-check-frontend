@@ -11,3 +11,13 @@
       display: none;
    }
 }
+
+#light .navigation__button_gray {
+   background-color: #DCDCDC;
+   color: #000;
+}
+
+#dark .navigation__button_gray {
+   background-color: #313131;
+   color: #fff;
+}

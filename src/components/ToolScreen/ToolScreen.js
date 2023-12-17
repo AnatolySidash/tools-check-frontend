@@ -3,7 +3,7 @@ import mainApi from '../../utils/MainApi.js';
 import { useInput } from '../../utils/Validation.js';
 
 
-function ToolScreen({ tool, onClose, isOpen, setTools, isToolInfoUpdated, setToolInfoUpdated, isToolInfoDeleted, setToolInfoDeleted, submitButtonActive, setSubmitDataActive }) {
+function ToolScreen({ tool, onClose, isOpen, setTools, isToolInfoUpdated, setToolInfoUpdated, isToolInfoDeleted, setToolInfoDeleted, submitButtonActive, setSubmitDataActive, setToolDeleteConfirm, toolDeleteConfirm }) {
 
     const [toolNameRU, setNameRU] = React.useState('');
     const [toolNameEN, setNameEN] = React.useState('');
@@ -104,6 +104,10 @@ function ToolScreen({ tool, onClose, isOpen, setTools, isToolInfoUpdated, setToo
         } else {
             return 'Не годен';
         }
+    }
+
+    const handleDeleteConfirmation = () => {
+        setToolDeleteConfirm(true);
     }
 
     const handleToolModelChange = (event) => {
@@ -645,8 +649,8 @@ function ToolScreen({ tool, onClose, isOpen, setTools, isToolInfoUpdated, setToo
                     maxLength={600}>
                 </textarea>
                 <p className='toolscreen__comment'>* обязательное поле</p>
-                { isToolInfoUpdated && <span className='toolscreen__infotooltip'>Данные успешно обновлены</span>}
-                { isToolInfoDeleted && <span className='toolscreen__infotooltip'>Данные успешно удалены</span>}
+                {isToolInfoUpdated && <span className='toolscreen__infotooltip'>Данные успешно обновлены</span>}
+                {isToolInfoDeleted && <span className='toolscreen__infotooltip'>Данные успешно удалены</span>}
             </fieldset>
             <button type="button" className="toolscreen__close" onClick={onClose} />
             {!submitButtonActive && <button type="button" className="toolscreen__button" onClick={onToolDataChange}>Редактировать</button>}
@@ -666,7 +670,8 @@ function ToolScreen({ tool, onClose, isOpen, setTools, isToolInfoUpdated, setToo
                 !toolUsageLocationValid.inputValid ||
                 !toolInstalledLocationValid.inputValid } 
                 type="submit" className="toolscreen__button toolscreen__button_save">Сохранить</button>}
-            <button type="button" className="toolscreen__button toolscreen__button_delete" onClick={() => handleToolDelete(tool)}>Удалить</button>
+            {!toolDeleteConfirm && <button type="button" className="toolscreen__button toolscreen__button_delete" onClick={handleDeleteConfirmation}>Удалить</button>}
+            {toolDeleteConfirm && <button type="button" className="toolscreen__button toolscreen__button_delete-confirm" onClick={() => handleToolDelete(tool)}>Подтвердить удаление</button>}
             <button type="button" className="toolscreen__button toolscreen__button_copy" onClick={handleToolDuplicate}>Сделать копию</button>
          </form>
       </main >

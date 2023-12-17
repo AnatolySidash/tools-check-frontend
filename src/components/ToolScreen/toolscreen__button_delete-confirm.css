@@ -1,0 +1,8 @@
+.toolscreen__button_delete-confirm {
+    left: 1042px;
+}
+
+#light .toolscreen__button_delete-confirm {
+    background-color: #FF6347;
+    color: #2F4F4F;
+}

@@ -7,6 +7,7 @@
    color: #fff;
    cursor: pointer;
    transition: opacity 0.3s ease-in-out;
+   box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
 }
 
 .searchform__button:hover {
@@ -16,4 +17,12 @@
 
 .searchform__button:disabled {
    background-color: #424242;
+}
+
+#light .searchform__button {
+   background-color: #00BFFF;
+}
+
+#light .searchform__button:disabled {
+   background-color: #C0C0C0;
 }

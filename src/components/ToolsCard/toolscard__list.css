@@ -7,3 +7,7 @@
     align-items: center;
     border-top: 1px solid #ccc;
 }
+
+#light .toolscard__list {
+    border-top: 1px solid #F0FFF0;
+}

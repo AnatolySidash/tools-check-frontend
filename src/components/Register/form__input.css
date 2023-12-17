@@ -14,3 +14,8 @@
 .form__input:focus {
     outline: 1px solid #6666FF;
 }
+
+#light .form__input {
+    background-color: #C0C0C0;
+    color: #2F4F4F;
+}

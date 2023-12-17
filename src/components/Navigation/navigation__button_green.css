@@ -10,3 +10,7 @@
       padding: 5px 12px;
    }
 }
+
+#light .navigation__button_green {
+   background-color: #00BFFF;
+}

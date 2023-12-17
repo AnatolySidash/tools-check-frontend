@@ -15,3 +15,12 @@
     color: #fff;
     text-align: right;
 }
+
+#light .profile__input {
+    color:#2F4F4F;
+ }
+
+ #light .profile__input:focus {
+    outline: none;
+    background-color: #C0C0C0;
+}

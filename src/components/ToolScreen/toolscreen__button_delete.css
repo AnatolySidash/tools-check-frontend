@@ -2,3 +2,8 @@
     left: 930px;
     background-color: #ec4343;
 }
+
+#light .toolscreen__button_delete {
+    background-color: #FF6347;
+    color: #2F4F4F;
+}

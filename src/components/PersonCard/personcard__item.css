@@ -1,0 +1,7 @@
+.personcard__item {
+    padding: 0 0 5px;
+    margin: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}

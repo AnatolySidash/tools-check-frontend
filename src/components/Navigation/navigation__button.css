@@ -22,3 +22,7 @@
       line-height: 1.6;
    }
 }
+
+#light .navigation__button {
+   color: #2F4F4F;
+}

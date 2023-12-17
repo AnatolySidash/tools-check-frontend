@@ -11,6 +11,7 @@
     font-size: 14px;
     font-weight: 500;
     transition: all 0.3s ease-in-out;
+    box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
 }
 
 .form__button:disabled {
@@ -19,7 +20,6 @@
 
 .form__button:hover {
     opacity: 0.8;
-    box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
 }
 
 .form__button:focus {

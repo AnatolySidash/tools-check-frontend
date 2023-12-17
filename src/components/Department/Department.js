@@ -2,22 +2,6 @@ import React from 'react';
 
 function Department({ tools, department, onDepartmentClick }) {
 
-    // const [allTools, setAllTools] = React.useState([]);
-
-    // async function handleToolListUpdate() {
-    //     try {
-    //         const tools = await mainApi.getTools();
-    //         localStorage.setItem('allTools', JSON.stringify(tools));
-    //         setAllTools(JSON.parse(localStorage.getItem('allTools')));
-    //     } catch (err) {
-    //         console.error(`Ошибка загрузки списка средст измерения: ${err}`);
-    //     }
-    //  }
-
-    // React.useEffect(() => {
-    //     handleToolListUpdate();
-    // }, []);
-
     // Общий список СИ
 
     const okTools = tools.filter((tool) => {

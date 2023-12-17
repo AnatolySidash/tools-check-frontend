@@ -33,6 +33,7 @@
 @import url(./components/Navigation/navigation__button.css);
 @import url(./components/Navigation/navigation__button_green.css);
 @import url(./components/Navigation/navigation__button_gray.css);
+@import url(./components/Navigation/navigation__switch.css);
 
 /* ------Tools------ */
 
@@ -75,6 +76,7 @@
 @import url(./components/ToolScreen/toolscreen__input.css);
 @import url(./components/ToolScreen/toolscreen__button.css);
 @import url(./components/ToolScreen/toolscreen__button_delete.css);
+@import url(./components/ToolScreen/toolscreen__button_delete-confirm.css);
 @import url(./components/ToolScreen/toolscreen__button_copy.css);
 @import url(./components/ToolScreen/toolscreen__button_save.css);
 @import url(./components/ToolScreen/toolscreen__input_textarea.css);
@@ -154,11 +156,23 @@
 @import url(./components/DepartmentScreen/departmentscreen__title.css);
 @import url(./components/DepartmentScreen/departmentscreen__info.css);
 @import url(./components/DepartmentScreen/departmentscreen__block.css);
+@import url(./components/DepartmentScreen/departmentscreen__block_scroll.css);
 @import url(./components/DepartmentScreen/departmentscreen__block_problem.css);
 @import url(./components/DepartmentScreen/departmentscreen__subtitle.css);
 @import url(./components/DepartmentScreen/departmentscreen__item.css);
 @import url(./components/DepartmentScreen/departmentscreen__data.css);
 @import url(./components/DepartmentScreen/departmentscreen__name.css);
+@import url(./components/DepartmentScreen/departmentscreen__name_small.css);
 @import url(./components/DepartmentScreen/departmentscreen__result.css);
 @import url(./components/DepartmentScreen/departmentscreen__list.css);
 @import url(./components/DepartmentScreen/departmentscreen__accent.css);
+@import url(./components/DepartmentScreen/departmentscreen__sublist.css);
+
+/* ------PersonCard------ */
+
+@import url(./components/PersonCard/personcard.css);
+@import url(./components/PersonCard/personcard__name.css);
+@import url(./components/PersonCard/personcard__list.css);
+@import url(./components/PersonCard/personcard__subtitle.css);
+@import url(./components/PersonCard/personcard__item.css);
+@import url(./components/PersonCard/personcard__data.css);

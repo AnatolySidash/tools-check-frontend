@@ -20,3 +20,14 @@
 .toolscardlist__more-button:hover {
     background-color: #2f2f2f;
  }
+
+ #light .toolscardlist__more-button {
+    background-color: #C0C0C0;
+    border: none;
+    color: #2F4F4F
+ }
+
+ #light .toolscardlist__more-button:hover {
+    background-color: #696969;
+    color: #fff;
+ }

@@ -12,3 +12,7 @@
 .toolscard__title:hover {
     opacity: 0.7;
 }
+
+#light .toolscard__title {
+    color: #2F4F4F
+}
