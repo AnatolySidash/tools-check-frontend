@@ -1,0 +1,8 @@
+.about__accent {
+    color: blue;
+    font-weight: 500;
+}
+
+#dark .about__accent {
+    color: rgb(70, 238, 54);
+}

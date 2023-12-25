@@ -6,10 +6,8 @@ import { useInput } from '../../utils/Validation.js';
 import { ThemeContext } from '../../contexts/ThemeContext';
 import * as auth from '../../utils/Auth';
 
-function Register({ onLogin }) {
+function Register({ onLogin, isError, setError, errorMessage, setErrorMessage, isSubmitting, setIsSubmitting }) {
 
-   const [isError, setError] = React.useState(false);
-   const [errorMessage, setErrorMessage] = React.useState({});
    const { theme } = React.useContext(ThemeContext);
 
    function handleErrorMessage() {
@@ -23,17 +21,20 @@ function Register({ onLogin }) {
    const password = useInput('', { isEmpty: true, minLength: 8 });
 
    const handleSubmit = (event) => {
+      setIsSubmitting(true);
       event.preventDefault();
       auth.register(name.value, id.value, password.value).then((data) => {
          console.log(data);
          auth.login(data.id, password.value).then((data) => {
             onLogin();
-            navigate('/tools', { replace: true });
+            navigate('/', { replace: true });
+            setIsSubmitting(false);
          })
       })
          .catch((err) => {
             handleErrorMessage();
             console.error(`Ошибка: ${err}`);
+            setIsSubmitting(false);
             setErrorMessage({
                message: err,
             })
@@ -78,7 +79,6 @@ function Register({ onLogin }) {
                   </input>
                   {(id.isDirty && id.isEmpty) && <span className="form__input-error">Поле не может быть пустым</span>}
                   {(id.isDirty && id.minLengthError) && <span className="form__input-error">В ID номере должно быть 8 символов</span>}
-                  {(id.isDirty && id.emailError) && <span className="form__input-error">Неверный формат электронной почты</span>}
                </label>
                <label className="register__item">Пароль
                   <input
@@ -97,7 +97,7 @@ function Register({ onLogin }) {
                   {(password.isDirty && password.minLengthError) && <span className="form__input-error">Не менее 8-ми символов</span>}
                </label>
                {isError && <span className="form__input-error form__input-error_main">{errorMessage.message}</span>}
-               <button disabled={!name.inputValid || !id.inputValid || !password.inputValid} type="submit" className="form__button">Зарегистрироваться</button>
+               <button disabled={!name.inputValid || !id.inputValid || !password.inputValid || isSubmitting} type="submit" className="form__button">Зарегистрироваться</button>
                <Link to="/signin" className="register__link">Уже зарегистрированы? <span className="register__link-accent">Войти</span></Link>
             </form>
          </main >

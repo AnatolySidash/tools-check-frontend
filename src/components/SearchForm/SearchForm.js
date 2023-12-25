@@ -11,6 +11,7 @@ function SearchForm({ tools, setTools, localDB }) {
    const [isOkCheckboxChecked, setOkCheckboxChecked] = React.useState(false);
    const [isNotOkCheckboxChecked, setNotOkCheckboxChecked] = React.useState(false);
    const [notFirstRender, setNotFirstRender] = React.useState(false);
+   const [isSubmitting, setIsSubmitting] = React.useState(false);
 
    function handleInputValueChange(event) {
       setInputValue(event.target.value);
@@ -70,6 +71,7 @@ function SearchForm({ tools, setTools, localDB }) {
    }
 
    async function handleSearchToolsSubmit(event) {
+      setIsSubmitting(true);
       event.preventDefault();
 
       try {
@@ -101,6 +103,7 @@ function SearchForm({ tools, setTools, localDB }) {
          } else {
             setInputEmpty(true);
          }
+         setIsSubmitting(false);
       } catch (err) {
          console.error(`Ошибка загрузки списка средств измерения: ${err}`);
       }
@@ -222,7 +225,7 @@ function SearchForm({ tools, setTools, localDB }) {
                   onChange={handleInputValueChange}
                   required>
                </input>
-               <button type="submit" className="searchform__button">Найти</button>
+               <button type="submit" disabled={isSubmitting} className="searchform__button">Найти</button>
                <button type="button" disabled={!isSearchMade} className="searchform__button" onClick={downloadAsExcel}>Скачать Excel</button>
             </fieldset>
             <fieldset className='searchform__fieldset'>

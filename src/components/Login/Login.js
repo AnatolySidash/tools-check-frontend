@@ -6,11 +6,9 @@ import { useInput } from '../../utils/Validation.js';
 import { ThemeContext } from '../../contexts/ThemeContext';
 import * as auth from '../../utils/Auth.js';
 
-function Login({ onLogin }) {
+function Login({ onLogin, isError, setError, errorMessage, setErrorMessage, isSubmitting, setIsSubmitting }) {
 
    const navigate = useNavigate();
-   const [isError, setError] = React.useState(false);
-   const [errorMessage, setErrorMessage] = React.useState({});
    const { theme } = React.useContext(ThemeContext);
 
    function handleErrorMessage() {
@@ -21,14 +19,17 @@ function Login({ onLogin }) {
    const password = useInput('', { isEmpty: true, minLength: 8 });
 
    const handleSubmit = (event) => {
+      setIsSubmitting(true);
       event.preventDefault();
       auth.login(id.value, password.value).then((data) => {
          onLogin();
-         navigate('/tools');
+         navigate('/');
+         setIsSubmitting(false);
       })
          .catch((err) => {
             handleErrorMessage();
             console.error(`Ошибка: ${err}`);
+            setIsSubmitting(false);
             setErrorMessage({
                message: err,
             })
@@ -76,7 +77,7 @@ function Login({ onLogin }) {
                {(password.isDirty && password.minLengthError) && <span className="form__input-error">Не менее 6-ти символов</span>}
             </label>
             {isError && <span className="form__input-error form__input-error_main">{errorMessage.message}</span>}
-            <button disabled={!id.inputValid || !password.inputValid} type="submit" className="form__button">Войти</button>
+            <button disabled={!id.inputValid || !password.inputValid || isSubmitting} type="submit" className="form__button">Войти</button>
             <Link to="/signup" className="login__link">Ещё не зарегистрированы? <span className="login__link-accent">Регистрация</span></Link>
          </form>
       </main >

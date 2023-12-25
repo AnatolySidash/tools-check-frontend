@@ -1,0 +1,14 @@
+.about {
+    background-color: rgb(225, 238, 227);
+    padding: 40px 0;
+    margin: 40px 70px;
+    border-radius: 3px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 100px;
+}
+
+#dark .about {
+    background-color: #424242;
+}

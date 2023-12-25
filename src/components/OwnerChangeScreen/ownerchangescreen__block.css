@@ -1,0 +1,9 @@
+.ownerchangescreen__block {
+    padding: 0;
+    margin: 0;
+    border: none;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    width: 100%;
+}

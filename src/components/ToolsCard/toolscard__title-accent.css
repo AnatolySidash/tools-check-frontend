@@ -2,3 +2,7 @@
     color: yellow;
     margin-left: 10px;
 }
+
+#light .toolscard__title-accent {
+    color: blue;
+}

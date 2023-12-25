@@ -1,7 +1,7 @@
 Название проекта: Tools Check App
 
 Описание: Приложение для регистрации, учёта и управления средствами измерения на автомобильном предприятии
-Использованы технологии: HTML5, CSS3 (Flexbox, Grid, Media Queries), JavaScript, React
+Использованы технологии: HTML5, CSS3 (Flexbox), JavaScript, React, MongoDB, NodeJS, Express, IndexedDB
 
 В данном проекте реализованы следующие функции:
 1. Регистрация нового пользователя

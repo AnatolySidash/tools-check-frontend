@@ -17,6 +17,20 @@
 /* ------Main------ */
 
 @import url(./components/Main/Main.css);
+@import url(./components/Main/about.css);
+@import url(./components/Main/about__image.css);
+@import url(./components/Main/about__title.css);
+@import url(./components/Main/about__info.css);
+@import url(./components/Main/about__greeting.css);
+@import url(./components/Main/about__accent.css);
+@import url(./components/Main/features.css);
+@import url(./components/Main/features__title.css);
+@import url(./components/Main/features__info.css);
+@import url(./components/Main/features__list.css);
+@import url(./components/Main/features__item.css);
+@import url(./components/Main/features__icon.css);
+@import url(./components/Main/features__subtitle.css);
+@import url(./components/Main/work.css);
 
 /* ------Header------ */
 
@@ -48,6 +62,7 @@
 @import url(./components/ToolsCardList/toolscardlist__button.css);
 @import url(./components/ToolsCardList/toolscardlist__more-button.css);
 @import url(./components/ToolsCardList/toolscardlist__block.css);
+@import url(./components/ToolsCardList/toolscardlist__button-resp.css);
 
 /* ------ToolsCard------ */
 
@@ -90,6 +105,8 @@
 
 @import url(./components/NewToolScreen/toolscreen__button_clear.css);
 @import url(./components/NewToolScreen/toolscreen__input_user.css);
+@import url(./components/NewToolScreen/toolscreen__input-autocomplete.css);
+@import url(./components/NewToolScreen/toolscreen__input-row.css);
 
 /* ------Register------ */
 
@@ -176,3 +193,20 @@
 @import url(./components/PersonCard/personcard__subtitle.css);
 @import url(./components/PersonCard/personcard__item.css);
 @import url(./components/PersonCard/personcard__data.css);
+
+/* ------PageNotFound------ */
+
+@import url(./components/PageNotFound/pagenotfound.css);
+@import url(./components/PageNotFound/pagenotfound__title.css);
+@import url(./components/PageNotFound/pagenotfound__link.css);
+@import url(./components/PageNotFound/pagenotfound__text.css);
+
+/* ------OwnerScreen------ */
+
+@import url(./components/OwnerChangeScreen/ownerchangescreen.css);
+@import url(./components/OwnerChangeScreen/ownerchangescreen_opened.css);
+@import url(./components/OwnerChangeScreen/ownerchangescreen__form.css);
+@import url(./components/OwnerChangeScreen/ownerchangescreen__block.css);
+@import url(./components/OwnerChangeScreen/ownerchangescreen__item.css);
+@import url(./components/OwnerChangeScreen/ownerchangescreen__input.css);
+@import url(./components/OwnerChangeScreen/ownerchangescreen__button.css);

@@ -1,9 +1,26 @@
 .navigation__logo {
    width: 50px;
    height: 50px;
+   transition: all 0.3s ease-in-out;
+}
+
+.navigation__logo::after {
+   content: 'Система учёта средств измерения';
+   position: absolute;
+   font-size: 10px;
+   color: #000;
+   top: 3px;
+   left: 60px;
+   max-width: 60px;
+   opacity: 0;
+   text-transform: capitalize;
    transition: opacity 0.3s ease-in-out;
 }
 
-.navigation__logo:hover {
-   opacity: 0.8;
+.navigation__logo:hover::after {
+   opacity: 1;
+}
+
+#dark .navigation__logo::after {
+   color: #fff;
 }

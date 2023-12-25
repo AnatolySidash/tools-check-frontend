@@ -5,3 +5,7 @@
     font-size: 14px;
     color: yellow;
 }
+
+#light .toolscard__timelimit {
+    color: blue;
+}

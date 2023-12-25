@@ -5,15 +5,13 @@ import { CurrentUserContext } from '../../contexts/CurrentUserContext.js';
 import { useInput } from '../../utils/Validation.js';
 import mainApi from '../../utils/MainApi.js';
 
-function Profile({ isLoggedIn, onLogout, setCurrentUser }) {
+function Profile({ isLoggedIn, onLogout, setCurrentUser, isError, setError, errorMessage, setErrorMessage, isSubmitting, setIsSubmitting }) {
 
    const currentUser = React.useContext(CurrentUserContext);
 
    const [submitButtonActive, setSubmitDataActive] = React.useState(false);
    const [isSuccessProfileUpdate, setSuccessProfileUpdate] = React.useState(false);
    const [isProfileDataChanged, setProfileDataChanged] = React.useState(false);
-   const [isError, setError] = React.useState(false);
-   const [errorMessage, setErrorMessage] = React.useState({});
 
    const name = useInput(currentUser.name, { isEmpty: true, minLength: 2, isUserName: true });
    const id = useInput(currentUser.id, { isEmpty: true, minLength: 7});
@@ -27,6 +25,8 @@ function Profile({ isLoggedIn, onLogout, setCurrentUser }) {
    }
 
    function handleSubmit(event) {
+      setIsSubmitting(true);
+      setError(false);
       event.preventDefault();
 
       if (currentUser.name !== name.value || currentUser.id !== id.value) {
@@ -37,6 +37,7 @@ function Profile({ isLoggedIn, onLogout, setCurrentUser }) {
          setProfileDataChanged(true);
          setSuccessProfileUpdate(true);
       }
+      setIsSubmitting(false);
    }
 
    function handleUpdateUser({ name, id }) {
@@ -109,8 +110,8 @@ function Profile({ isLoggedIn, onLogout, setCurrentUser }) {
                {(id.isDirty && id.emailError) && <span className="form__input-error">Неверный формат электронной почты</span>}
                {!submitButtonActive && <button type="button" onClick={onUserDataChange} className="profile__button">Редактировать</button>}
                {(!isError && isSuccessProfileUpdate && isProfileDataChanged) && <span className="form__submit-error">Данные пользователя успешно обновлены</span>}
-               {isError && <span className="form__input-error form__input-error_main">{errorMessage.message}</span>}
-               {submitButtonActive && <button disabled={!name.inputValid || !id.inputValid || (currentUser.name === name.value && currentUser.id === id.value)} type="submit" className="form__button">Сохранить</button>}
+               {isError && <span className="form__input-error form__input-error_main">Произошла ошибка на сервере:{errorMessage.message}</span>}
+               {submitButtonActive && <button disabled={!name.inputValid || !id.inputValid || (currentUser.name === name.value && currentUser.id === id.value) || isSubmitting} type="submit" className="form__button">Сохранить</button>}
             </form>
             <Link to="/">
                {!submitButtonActive && <button type="button" onClick={onLogout} className="profile__exit-button">Выйти из аккаунта</button>}

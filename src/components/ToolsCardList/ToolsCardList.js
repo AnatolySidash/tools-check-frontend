@@ -1,7 +1,7 @@
 import React from 'react';
 import ToolsCard from '../ToolsCard/ToolsCard.js';
 
-function ToolsCardList({ tools, onToolClick, onClose, onNewToolAdd }) {
+function ToolsCardList({ tools, onToolClick, onClose, onNewToolAdd, onRespChange }) {
 
     const [initialCardsQty, setInitialCardsQty] = React.useState(0);
     const [additionalCardsQty, setAdditionalCardsQty] = React.useState(0);
@@ -63,6 +63,7 @@ function ToolsCardList({ tools, onToolClick, onClose, onNewToolAdd }) {
                     <li className='toolscardlist__data'>Не годные: {notOkTools.length}</li>
                 </ul>
                 <button type='button' className='toolscardlist__button' onClick={onNewToolAdd}>Добавить новое СИ</button>
+                <button type='button' className='toolscardlist__button toolscardlist__button-resp' onClick={onRespChange}>Изменить ответственность</button>
                 <ul className='toolscardlist__list'>
                     <li className="toolscardlist__item">
                         {tools.toReversed().sort((a, b) => a.toolNameRU.localeCompare(b.toolNameRU)).slice(0, initialCardsQty).map((tool) => (

@@ -3,7 +3,7 @@ import mainApi from '../../utils/MainApi.js';
 import { useInput } from '../../utils/Validation.js';
 
 
-function ToolScreen({ tool, onClose, isOpen, setTools, isToolInfoUpdated, setToolInfoUpdated, isToolInfoDeleted, setToolInfoDeleted, submitButtonActive, setSubmitDataActive, setToolDeleteConfirm, toolDeleteConfirm }) {
+function ToolScreen({ tool, onClose, isOpen, setTools, isToolInfoUpdated, setToolInfoUpdated, isToolInfoDeleted, setToolInfoDeleted, submitButtonActive, setSubmitDataActive, setToolDeleteConfirm, toolDeleteConfirm, personList, isError, setError, errorMessage, setErrorMessage, isSubmitting, setIsSubmitting }) {
 
     const [toolNameRU, setNameRU] = React.useState('');
     const [toolNameEN, setNameEN] = React.useState('');
@@ -105,6 +105,14 @@ function ToolScreen({ tool, onClose, isOpen, setTools, isToolInfoUpdated, setToo
             return 'Не годен';
         }
     }
+    
+    function handleErrorMessage() {
+        setError(true);
+    }
+
+    function handleNameAutocomplete(searchValue) {
+        setToolOwnerName(searchValue);
+    }
 
     const handleDeleteConfirmation = () => {
         setToolDeleteConfirm(true);
@@ -155,6 +163,7 @@ function ToolScreen({ tool, onClose, isOpen, setTools, isToolInfoUpdated, setToo
     }
 
     function handleToolUpdate(event) {
+        setIsSubmitting(true);
         event.preventDefault();
   
         handleToolScreenUpdate({
@@ -193,17 +202,20 @@ function ToolScreen({ tool, onClose, isOpen, setTools, isToolInfoUpdated, setToo
             console.log(data);
             setToolInfoUpdated(true);
             setSubmitDataActive(false);
+            setIsSubmitting(false);
          })
          .catch((err) => {
-            // handleErrorMessage();
-            console.error(`Ошибка получения данных профиля: ${err}`);
-            // setErrorMessage({
-            //    message: err
-            // })
+            handleErrorMessage();
+            console.error(`Ошибка обновления данных карточки СИ: ${err}`);
+            setIsSubmitting(false);
+            setErrorMessage({
+               message: err
+            })
          });
     }
 
     function handleToolDuplicate(event) {
+        setIsSubmitting(true);
         event.preventDefault();
   
         handleToolScreenDuplicate({
@@ -239,13 +251,15 @@ function ToolScreen({ tool, onClose, isOpen, setTools, isToolInfoUpdated, setToo
         mainApi.addTool(tool)
          .then((data) => {
             setToolInfoUpdated(true);
+            setIsSubmitting(false);
          })
          .catch((err) => {
-            // handleErrorMessage();
-            console.error(`Ошибка получения данных профиля: ${err}`);
-            // setErrorMessage({
-            //    message: err
-            // })
+            handleErrorMessage();
+            console.error(`Ошибка создания дубликата карточки СИ: ${err}`);
+            setIsSubmitting(false);
+            setErrorMessage({
+               message: err
+            })
          });
     }
 
@@ -558,6 +572,18 @@ function ToolScreen({ tool, onClose, isOpen, setTools, isToolInfoUpdated, setToo
                     maxLength={40}
                     required>
                 </input>
+                <div className='toolscreen__input-autocomplete'>
+                    {personList
+                    .filter(item => {
+                        const searchValue = toolOwnerNameValid.value.toLowerCase();
+                        const personName = item.toLowerCase();
+                        return searchValue && personName.startsWith(searchValue) && personName !== searchValue;
+                    })
+                    .slice(0, 5)
+                    .map((item) => (
+                        <div className='toolscreen__input-row' onClick={() => handleNameAutocomplete(item)} key={item}>{item}</div>
+                    ))}
+                </div>
                 {(toolOwnerNameValid.isDirty && toolOwnerNameValid.isEmpty) && <span className="toolscreen__input-error">Поле не может быть пустым</span>}
                 {(toolOwnerNameValid.isDirty && toolOwnerNameValid.minLengthError) && <span className="toolscreen__input-error">Не менее 2-х символов</span>}
             </fieldset>
@@ -651,6 +677,7 @@ function ToolScreen({ tool, onClose, isOpen, setTools, isToolInfoUpdated, setToo
                 <p className='toolscreen__comment'>* обязательное поле</p>
                 {isToolInfoUpdated && <span className='toolscreen__infotooltip'>Данные успешно обновлены</span>}
                 {isToolInfoDeleted && <span className='toolscreen__infotooltip'>Данные успешно удалены</span>}
+                {isError && <span className="form__input-error form__input-error_main">Произошла ошибка на сервере: {errorMessage.message}</span>}  
             </fieldset>
             <button type="button" className="toolscreen__close" onClick={onClose} />
             {!submitButtonActive && <button type="button" className="toolscreen__button" onClick={onToolDataChange}>Редактировать</button>}
@@ -668,11 +695,12 @@ function ToolScreen({ tool, onClose, isOpen, setTools, isToolInfoUpdated, setToo
                 !toolOwnerNameValid.inputValid ||
                 !toolCurrentLocationValid.inputValid ||
                 !toolUsageLocationValid.inputValid ||
-                !toolInstalledLocationValid.inputValid } 
+                !toolInstalledLocationValid.inputValid ||
+                isSubmitting } 
                 type="submit" className="toolscreen__button toolscreen__button_save">Сохранить</button>}
             {!toolDeleteConfirm && <button type="button" className="toolscreen__button toolscreen__button_delete" onClick={handleDeleteConfirmation}>Удалить</button>}
             {toolDeleteConfirm && <button type="button" className="toolscreen__button toolscreen__button_delete-confirm" onClick={() => handleToolDelete(tool)}>Подтвердить удаление</button>}
-            <button type="button" className="toolscreen__button toolscreen__button_copy" onClick={handleToolDuplicate}>Сделать копию</button>
+            <button disabled={isSubmitting} type="button" className="toolscreen__button toolscreen__button_copy" onClick={handleToolDuplicate}>Сделать копию</button>
          </form>
       </main >
    )

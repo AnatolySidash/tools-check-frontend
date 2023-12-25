@@ -8,6 +8,7 @@ import Status from './../Status/Status.js';
 import Register from './../Register/Register.js';
 import Login from './../Login/Login.js';
 import Profile from './../Profile/Profile.js';
+import PageNotFound from './../PageNotFound/PageNotFound.js';
 import { CurrentUserContext } from '../../contexts/CurrentUserContext.js';
 import { ThemeContext } from '../../contexts/ThemeContext.js';
 import mainApi from '../../utils/MainApi.js';
@@ -16,6 +17,7 @@ import * as auth from '../../utils/Auth.js';
 import DepartmentScreen from '../DepartmentScreen/DepartmentScreen.js';
 import { DEPARTMENTS } from '../../utils/Constants.js';
 import { database } from '../../utils/Database.js';
+import OwnerChangeScreen from '../OwnerChangeScreen/OwnerChangeScreen.js';
 
 function App() {
 
@@ -27,9 +29,14 @@ function App() {
     const [isToolScreenOpen, setToolScreenOpen] = React.useState(false);
     const [isDepartmentScreenOpen, setDepartmentScreenOpen] = React.useState(false);
     const [isNewToolScreenOpen, setNewToolScreenOpen] = React.useState(false);
+    const [isOwnerScreenOpen, setOwnerScreenOpen] = React.useState(false);
     const [isToolInfoUpdated, setToolInfoUpdated] = React.useState(false);
-    const [isNewToolAdded, setNewToolAdded] = React.useState(false)
-    const [isToolInfoDeleted, setToolInfoDeleted] = React.useState(false)
+    const [isNewToolAdded, setNewToolAdded] = React.useState(false);
+    const [isToolInfoDeleted, setToolInfoDeleted] = React.useState(false);
+    const [isLoading, setIsLoading] = React.useState(false);
+    const [isError, setError] = React.useState(false);
+    const [errorMessage, setErrorMessage] = React.useState({});
+    const [isSubmitting, setIsSubmitting] = React.useState(false);
     
     const departments = DEPARTMENTS;
     const localDB = database;
@@ -63,6 +70,10 @@ function App() {
         setNewToolScreenOpen(true);
     }
 
+    function handleOwnerScreenOpen() {
+        setOwnerScreenOpen(true);
+    }
+
     function closeAllPopups() {
         setToolScreenOpen(false);
         setDepartmentScreenOpen(false);
@@ -72,6 +83,8 @@ function App() {
         setToolInfoDeleted(false);
         setSubmitDataActive(false);
         setToolDeleteConfirm(false);
+        setError(false);
+        setOwnerScreenOpen(false);
     }
 
     React.useEffect(() => {
@@ -136,11 +149,14 @@ function App() {
     
     React.useEffect(() => {
         async function updateAndSetData() {
+            setIsLoading(true);
             const receivedData = await getAllTools();
             const updatedData = await updateToolsData(receivedData);
             await clearDataBase();
             await setToDataBase(updatedData);
             console.log('Data uploaded');
+            setIsLoading(false);
+            setError(false);
         }
         updateAndSetData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -151,7 +167,7 @@ function App() {
           .then((res) => {
             setLoggedIn(false);
             localStorage.clear();
-            navigate("/", { replace: true });
+            navigate("/signin", { replace: true });
           })
           .catch((err) => {
             console.error(`Ошибка: ${err}`);
@@ -171,7 +187,8 @@ function App() {
                         <Routes>
                             <Route path="/" element={
                                 <Main 
-                                isLoggedIn={isLoggedIn}
+                                    isLoggedIn={isLoggedIn}
+                                    isLoading={isLoading}
                                 />
                             } />
 
@@ -183,6 +200,7 @@ function App() {
                                         setTools={setTools}
                                         onToolClick={handleToolClick}
                                         onNewToolAdd={handleNewToolClick}
+                                        onRespChange={handleOwnerScreenOpen}
                                         localDB={localDB}
                                         />}
                                         isLoggedIn={isLoggedIn} />
@@ -190,33 +208,55 @@ function App() {
 
                             <Route path="/status" element={
                                 <Status
-                                tools={tools}
-                                isLoggedIn={isLoggedIn}
-                                departments={departments}
-                                onDepartmentClick={handleDepartmentClick}
+                                    tools={tools}
+                                    isLoggedIn={isLoggedIn}
+                                    departments={departments}
+                                    onDepartmentClick={handleDepartmentClick}
                                 />
                             } />
 
                             <Route path="/signup" element={
                                 <Register 
-                                onLogin={handleLogin}
+                                    onLogin={handleLogin}
+                                    isError={isError}
+                                    setError={setError}
+                                    errorMessage={errorMessage}
+                                    setErrorMessage={setErrorMessage}
+                                    isSubmitting={isSubmitting}
+                                    setIsSubmitting={setIsSubmitting}
                                 />
                             } />
 
                             <Route path="/signin" element={
                                 <Login 
-                                onLogin={handleLogin}
+                                    onLogin={handleLogin}
+                                    isError={isError}
+                                    setError={setError}
+                                    errorMessage={errorMessage}
+                                    setErrorMessage={setErrorMessage}
+                                    isSubmitting={isSubmitting}
+                                    setIsSubmitting={setIsSubmitting}
                                 />
                             } />
 
                             <Route path="/profile" element={
                                 <ProtectedRoute element={
                                     <Profile 
-                                    isLoggedIn={isLoggedIn}
+                                        isLoggedIn={isLoggedIn}
                                         onLogout={logout}
                                         setCurrentUser={setCurrentUser}
+                                        isError={isError}
+                                        setError={setError}
+                                        errorMessage={errorMessage}
+                                        setErrorMessage={setErrorMessage}
+                                        isSubmitting={isSubmitting}
+                                        setIsSubmitting={setIsSubmitting}
                                     />} 
                                     isLoggedIn={isLoggedIn} />
+                            } />
+
+                            <Route path="/*" element={
+                                <PageNotFound />
                             } />
 
                         </Routes>
@@ -234,7 +274,14 @@ function App() {
                             setSubmitDataActive={setSubmitDataActive}
                             toolDeleteConfirm={toolDeleteConfirm}
                             setToolDeleteConfirm={setToolDeleteConfirm}
-                            />
+                            isError={isError}
+                            setError={setError}
+                            errorMessage={errorMessage}
+                            setErrorMessage={setErrorMessage}
+                            isSubmitting={isSubmitting}
+                            setIsSubmitting={setIsSubmitting}
+                            personList={personList}
+                        />
 
                         <DepartmentScreen
                             selectedDepartment={selectedDepartment}
@@ -242,7 +289,7 @@ function App() {
                             onClose={closeAllPopups}
                             tools={tools}
                             personList={personList}
-                            />
+                        />
 
                         <NewToolScreen
                             tool={selectedTool}
@@ -251,7 +298,20 @@ function App() {
                             setSelectedTool={setSelectedTool}
                             isNewToolAdded={isNewToolAdded}
                             setNewToolAdded={setNewToolAdded}
-                            />
+                            isError={isError}
+                            setError={setError}
+                            errorMessage={errorMessage}
+                            setErrorMessage={setErrorMessage}
+                            isSubmitting={isSubmitting}
+                            setIsSubmitting={setIsSubmitting}
+                            personList={personList}
+                        />
+
+                        <OwnerChangeScreen 
+                            isOpen={isOwnerScreenOpen}
+                            onClose={closeAllPopups}
+                            tools={tools}
+                        />
                     </div>
                 </div>
             </ThemeContext.Provider>

@@ -1,0 +1,8 @@
+.features {
+    padding: 0;
+    margin: 0 70px 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+}

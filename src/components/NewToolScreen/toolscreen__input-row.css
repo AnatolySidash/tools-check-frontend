@@ -1,0 +1,23 @@
+.toolscreen__input-row {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    width: 100%;
+    padding: 2px 5px;
+    margin: 0;
+    background-color: #424242;
+    cursor: pointer;
+}
+
+.toolscreen__input-row:hover {
+    background-color: #8e948f;
+}
+
+#light .toolscreen__input-row {
+    background-color: #a7aca8;
+}
+
+#light .toolscreen__input-row:hover {
+    background-color: #8e948f;
+}

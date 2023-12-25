@@ -1,3 +1,7 @@
 .toolscreen__input_user {
     background-color: #a7aca8;
 }
+
+#light .toolscreen__input_user {
+    background-color: #a6c4e0;
+}

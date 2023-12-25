@@ -2,10 +2,11 @@ import React from 'react';
 import mainApi from '../../utils/MainApi.js';
 import { useInput } from '../../utils/Validation.js';
 
-function NewToolScreen({ onClose, isOpen, setSelectedTool, isNewToolAdded, setNewToolAdded }) {
+function NewToolScreen({ onClose, isOpen, setSelectedTool, isNewToolAdded, setNewToolAdded, personList, isError, setError, errorMessage, setErrorMessage, isSubmitting, setIsSubmitting }) {
 
     const [toolModel, setToolModel] = React.useState('');
     const [toolId, setToolId] = React.useState('');
+    const [toolOwnerName, setToolOwnerName] = React.useState('');
     const [toolManufacturer, setToolManufacturer] = React.useState('');
     const [toolSerialNo, setToolSerialNo] = React.useState('');
     const [toolRegisterNo, setToolRegisterNo] = React.useState('');
@@ -27,7 +28,7 @@ function NewToolScreen({ onClose, isOpen, setSelectedTool, isNewToolAdded, setNe
     const toolCategoryValid = useInput('', { isEmpty: true });
     const toolOwnerDeptValid = useInput('', { isEmpty: true });
     const toolOwnerSectionValid = useInput('', { isEmpty: true });
-    const toolOwnerNameValid = useInput('', { isEmpty: true, minLength: 2 });
+    const toolOwnerNameValid = useInput(toolOwnerName, { isEmpty: true, minLength: 2 });
     const toolUsageLocationValid = useInput('', { isEmpty: true, minLength: 2 });
     const toolCurrentLocationValid = useInput('', { isEmpty: true, minLength: 2 });
     const toolInstalledLocationValid = useInput('', { isEmpty: true, minLength: 2 });
@@ -62,6 +63,10 @@ function NewToolScreen({ onClose, isOpen, setSelectedTool, isNewToolAdded, setNe
         }
     }
 
+    function handleNameAutocomplete(searchValue) {
+        setToolOwnerName(searchValue);
+    }
+
     function handleToolCheckDate() {
         if(toolCheckDate) {
             return toolCheckDate.toString();
@@ -69,6 +74,10 @@ function NewToolScreen({ onClose, isOpen, setSelectedTool, isNewToolAdded, setNe
             return new Date().toString();
         }
     }
+    
+    function handleErrorMessage() {
+        setError(true);
+     }
 
     const handleToolModelChange = (event) => {
         setToolModel(event.target.value);
@@ -127,6 +136,7 @@ function NewToolScreen({ onClose, isOpen, setSelectedTool, isNewToolAdded, setNe
     }
 
     function handleNewToolAdd(event) {
+        setIsSubmitting(true);
         event.preventDefault();
   
         handleToolScreenUpdate({
@@ -217,13 +227,14 @@ function NewToolScreen({ onClose, isOpen, setSelectedTool, isNewToolAdded, setNe
          .then((data) => {
             setSelectedTool(data);
             setNewToolAdded(true);
+            setIsSubmitting(false);
          })
          .catch((err) => {
-            // handleErrorMessage();
+            handleErrorMessage();
             console.error(`Ошибка получения данных профиля: ${err}`);
-            // setErrorMessage({
-            //    message: err
-            // })
+            setErrorMessage({
+               message: err
+            })
          });
       }
 
@@ -511,13 +522,26 @@ function NewToolScreen({ onClose, isOpen, setSelectedTool, isNewToolAdded, setNe
                     placeholder="Например: Пушкин Александр"
                     minLength={2}
                     maxLength={40}
+                    autoComplete='off'
                     required>
                 </input>
+                <div className='toolscreen__input-autocomplete'>
+                    {personList
+                    .filter(item => {
+                        const searchValue = toolOwnerNameValid.value.toLowerCase();
+                        const personName = item.toLowerCase();
+                        return searchValue && personName.startsWith(searchValue) && personName !== searchValue;
+                    })
+                    .slice(0, 5)
+                    .map((item) => (
+                        <div className='toolscreen__input-row' onClick={() => handleNameAutocomplete(item)} key={item}>{item}</div>
+                    ))}
+                </div>
                 {(toolOwnerNameValid.isDirty && toolOwnerNameValid.isEmpty) && <span className="toolscreen__input-error">Поле не может быть пустым</span>}
                 {(toolOwnerNameValid.isDirty && toolOwnerNameValid.minLengthError) && <span className="toolscreen__input-error">Не менее 2-х символов</span>}
             </fieldset>
 
-            <fieldset className='toolscreen__block toolscreen__block_checkbox'>
+            <fieldset className='toolscreen__block'>
                 <label htmlFor='newUsageLocation' className="toolscreen__item">Место нахождения*</label>
                 <textarea 
                     className="toolscreen__input toolscreen__input_user toolscreen__input_textarea"
@@ -605,9 +629,10 @@ function NewToolScreen({ onClose, isOpen, setSelectedTool, isNewToolAdded, setNe
                 </textarea>
                 <p className='toolscreen__comment'>* обязательное поле</p>
                 {isNewToolAdded && <span className='toolscreen__infotooltip'>Новое СИ успешно добавлено</span>}
+                {isError && <span className="form__input-error form__input-error_main">Произошла ошибка на сервере: {errorMessage.message}</span>}  
             </fieldset>
             <button type="button" className="toolscreen__close" onClick={onClose} />
-            <button  disabled={
+            <button disabled={
                 !toolNameRUValid.inputValid ||
                 !toolNameENValid.inputValid ||
                 !toolTypeValid.inputValid ||
@@ -618,7 +643,8 @@ function NewToolScreen({ onClose, isOpen, setSelectedTool, isNewToolAdded, setNe
                 !toolUsageLocationValid.inputValid ||
                 !toolCurrentLocationValid.inputValid ||
                 !toolInstalledLocationValid.inputValid ||
-                !toolConditionValid.inputValid
+                !toolConditionValid.inputValid ||
+                isSubmitting
             }
             type="submit" className="toolscreen__button toolscreen__button_save">Сохранить</button>
          </form>

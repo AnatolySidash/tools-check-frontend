@@ -18,6 +18,14 @@
     background-color: #424242;
 }
 
+#light .form__button:disabled {
+    background-color: #C0C0C0;
+}
+
+#light .form__button {
+    background-color: #00BFFF;
+}
+
 .form__button:hover {
     opacity: 0.8;
 }

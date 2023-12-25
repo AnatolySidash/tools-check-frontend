@@ -11,7 +11,7 @@ function Navigation({ isLoggedIn }) {
 
    return (
       <nav className='navigation'>
-         <NavLink to="/" className="navigation__logo">
+         <NavLink to='/' className="navigation__logo">
             <img src={theme === 'dark' ? logo : logoDark} alt="Логотип сайта в виде датчиков давления" className="logo" />
          </NavLink>
          { isLoggedIn && <ul className="navigation__list">

@@ -1,0 +1,18 @@
+.pagenotfound__link {
+   margin: 100px 0 0;
+   padding: 0;
+   border: 0;
+   text-decoration: none;
+   font-family: 'Inter', Arial, sans-serif;
+   font-style: normal;
+   font-size: 14px;
+   font-weight: 400;
+   color: #4285F4;
+   cursor: pointer;
+   background-color: transparent;
+   transition: opacity 0.3s ease-in-out;
+}
+
+.pagenotfound__link:hover {
+   opacity: 0.8;
+}
